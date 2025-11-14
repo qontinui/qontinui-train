@@ -1,0 +1,115 @@
+# Vision Transformer Base Configuration for GUI Element Detection
+# Model: ViT-Base (12-layer, 768-dim, 12 heads)
+# Target: Training from scratch on large-scale GUI datasets
+
+# Model Architecture
+model:
+  name: "vit_base"
+  type: "detection"  # detection, classification, segmentation
+
+  # ViT encoder configuration
+  encoder:
+    patch_size: 16
+    img_size: 224
+    in_channels: 3
+    embed_dim: 768
+    depth: 12  # Number of transformer blocks
+    num_heads: 12
+    mlp_ratio: 4.0
+    dropout: 0.1
+    attention_dropout: 0.0
+
+  # Detection head configuration
+  detection_head:
+    type: "transformer"  # transformer, mlp, rpn, multi-scale
+    num_queries: 100
+    num_classes: 10  # Number of element types
+    hidden_dim: 2048
+    num_decoder_layers: 6
+    num_decoder_heads: 8
+
+# Training Configuration
+training:
+  num_epochs: 300
+  batch_size: 64
+  num_gpus: 8
+
+  # Optimizer
+  optimizer:
+    type: "adamw"
+    learning_rate: 1.0e-4
+    weight_decay: 0.05
+    betas: [0.9, 0.999]
+
+  # Learning Rate Scheduler
+  scheduler:
+    type: "cosine"  # cosine, linear, exponential
+    warmup_epochs: 20
+    min_lr: 1.0e-6
+
+  # Mixed Precision Training
+  mixed_precision: true
+  precision: "bf16"  # bf16, fp16, fp32
+
+  # Gradient Accumulation
+  gradient_accumulation_steps: 1
+
+  # Checkpointing
+  save_interval: 10  # Save checkpoint every N epochs
+  save_best: true  # Save best model based on validation metric
+
+# Data Configuration
+data:
+  dataset: "gui_detection"
+  data_path: "data/processed"
+  num_workers: 8
+
+  # Image preprocessing
+  image_size: 224
+  crop: true
+
+  # Data augmentation
+  augmentation:
+    random_flip: true
+    random_crop: true
+    color_jitter: true
+    gaussian_blur: false
+
+  # Validation
+  validation_split: 0.1
+  test_split: 0.1
+
+# Evaluation Configuration
+evaluation:
+  # Detection metrics
+  iou_threshold: 0.5
+  conf_threshold: 0.5
+
+  # Evaluation frequency
+  eval_interval: 5  # Evaluate every N epochs
+  val_split: 0.1
+
+# Logging and Monitoring
+logging:
+  use_wandb: true
+  project_name: "qontinui-train"
+  experiment_name: "vit_base_gui_detection"
+  log_interval: 50  # Log metrics every N batches
+
+  # Checkpoint directory
+  checkpoint_dir: "checkpoints/vit_base"
+
+# Performance and Hardware
+hardware:
+  device: "cuda"
+  num_gpus: 8
+  ddp_enabled: true
+
+  # Memory optimization
+  gradient_checkpointing: true
+  autocast_enabled: true
+
+# Reproducibility
+reproducibility:
+  seed: 42
+  deterministic: true

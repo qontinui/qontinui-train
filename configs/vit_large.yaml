@@ -1,0 +1,86 @@
+# Vision Transformer Large Configuration
+# Model: ViT-Large (24-layer, 1024-dim, 16 heads)
+# For training on 1M+ examples for foundation model
+
+model:
+  name: "vit_large"
+  type: "detection"
+
+  encoder:
+    patch_size: 16
+    img_size: 224
+    in_channels: 3
+    embed_dim: 1024
+    depth: 24
+    num_heads: 16
+    mlp_ratio: 4.0
+    dropout: 0.1
+    attention_dropout: 0.0
+
+  detection_head:
+    type: "transformer"
+    num_queries: 100
+    num_classes: 10
+    hidden_dim: 2560
+    num_decoder_layers: 6
+    num_decoder_heads: 8
+
+training:
+  num_epochs: 500
+  batch_size: 128  # Per GPU, with 8 GPUs = 1024 global
+  num_gpus: 8
+
+  optimizer:
+    type: "adamw"
+    learning_rate: 1.0e-4
+    weight_decay: 0.05
+    betas: [0.9, 0.999]
+
+  scheduler:
+    type: "cosine"
+    warmup_epochs: 30
+    min_lr: 1.0e-6
+
+  mixed_precision: true
+  precision: "bf16"
+
+  gradient_accumulation_steps: 1
+
+  save_interval: 20
+  save_best: true
+
+data:
+  dataset: "gui_detection_1m"
+  data_path: "data/processed"
+  num_workers: 16
+
+  image_size: 224
+
+  augmentation:
+    random_flip: true
+    random_crop: true
+    color_jitter: true
+
+evaluation:
+  iou_threshold: 0.5
+  conf_threshold: 0.5
+  eval_interval: 10
+
+logging:
+  use_wandb: true
+  project_name: "qontinui-train"
+  experiment_name: "vit_large_foundation"
+  log_interval: 100
+  checkpoint_dir: "checkpoints/vit_large"
+
+hardware:
+  device: "cuda"
+  num_gpus: 8
+  ddp_enabled: true
+  gradient_checkpointing: true
+  autocast_enabled: true
+  enable_tf32: true
+
+reproducibility:
+  seed: 42
+  deterministic: true
