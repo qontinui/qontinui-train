@@ -1,0 +1,238 @@
+# Weights & Biases (wandb) Experiment Tracking Configuration
+# For qontinui-train: Foundation model training for GUI understanding
+
+wandb:
+  # Enable/disable wandb logging
+  enabled: true
+
+  # Project configuration
+  project: "qontinui-train"
+  entity: null  # Set to your wandb username or team name
+
+  # Experiment naming
+  name: null  # Auto-generated if null: {model}_{dataset}_{timestamp}
+  group: null  # Group related experiments (e.g., "mae_pretrain", "vit_finetune")
+  tags: []  # List of tags for filtering (e.g., ["baseline", "ablation", "production"])
+  notes: ""  # Experiment description
+
+  # Run configuration
+  mode: "online"  # "online", "offline", "disabled"
+  save_code: true  # Save code snapshot
+
+  # Logging configuration
+  log_freq: 100  # Log metrics every N steps
+  log_model: "checkpoint"  # "checkpoint", "end", "best", false
+  log_gradients: false  # Log gradient histograms (expensive)
+  log_graph: false  # Log model graph (for small models only)
+
+  # What to log
+  watch:
+    enabled: false  # Watch model gradients and parameters (very expensive)
+    log: "gradients"  # "gradients", "parameters", "all"
+    log_freq: 1000
+
+  # Artifact tracking
+  artifacts:
+    # Dataset versioning
+    log_datasets: true
+    dataset_type: "dataset"
+
+    # Model checkpoints
+    log_checkpoints: true
+    checkpoint_frequency: 5  # Save every N epochs
+
+    # Predictions and visualizations
+    log_predictions: true
+    num_prediction_samples: 100  # Number of samples to log
+
+  # Resume configuration
+  resume: "allow"  # "allow", "must", "never", "auto"
+  resume_id: null  # Specific run ID to resume from
+
+  # Distributed training
+  distributed:
+    # Only log from rank 0 in distributed training
+    log_only_rank_0: true
+    sync_tensorboard: false  # Sync tensorboard logs to wandb
+
+# Integration with PyTorch Lightning
+lightning:
+  logger:
+    WandbLogger:
+      project: "qontinui-train"
+      save_dir: "logs/wandb"
+      log_model: true
+      prefix: ""
+
+  callbacks:
+    # Log learning rate
+    LearningRateMonitor:
+      logging_interval: "step"
+
+    # Log model checkpoints
+    ModelCheckpoint:
+      monitor: "val/map"
+      mode: "max"
+      save_top_k: 3
+      save_last: true
+
+# Metrics to track
+metrics:
+  # Training metrics
+  train:
+    - loss
+    - loss/classification
+    - loss/bbox_regression
+    - loss/giou
+    - learning_rate
+    - grad_norm
+    - epoch
+    - step
+
+  # Validation metrics
+  val:
+    - loss
+    - map  # Mean Average Precision
+    - map_50  # AP at IoU=0.50
+    - map_75  # AP at IoU=0.75
+    - map_small  # AP for small objects
+    - map_medium  # AP for medium objects
+    - map_large  # AP for large objects
+    - precision
+    - recall
+    - f1_score
+
+  # Pre-training specific metrics
+  pretrain:
+    - reconstruction_loss
+    - mask_ratio
+    - learning_rate
+    - throughput  # images/sec
+
+  # System metrics
+  system:
+    - gpu_memory_allocated
+    - gpu_memory_reserved
+    - gpu_utilization
+    - cpu_percent
+    - ram_percent
+    - disk_usage
+    - throughput  # samples/sec
+    - time_per_epoch
+
+# Media logging
+media:
+  # Log sample images with predictions
+  predictions:
+    enabled: true
+    num_samples: 20
+    frequency: 5  # Log every N epochs
+    iou_threshold: 0.5
+    confidence_threshold: 0.5
+
+  # Log training curves
+  curves:
+    - precision_recall_curve
+    - roc_curve
+    - confusion_matrix
+
+  # Log model architecture
+  model_graph:
+    enabled: false  # Set to true for small models only
+
+  # Log attention maps (for ViT)
+  attention_maps:
+    enabled: false  # Very expensive, use sparingly
+    num_samples: 5
+    layer_indices: [0, 6, 11]  # Which transformer layers to visualize
+
+# Hyperparameter tracking
+hyperparameters:
+  # Automatically tracked from config
+  auto_track:
+    - model
+    - optimizer
+    - scheduler
+    - data
+    - training
+
+  # Custom hyperparameters to track
+  custom: {}
+
+# Alerts and notifications
+alerts:
+  # Alert on training anomalies
+  enabled: false
+
+  # Conditions
+  conditions:
+    # Alert if loss diverges
+    - type: "loss_spike"
+      threshold: 10.0  # Relative increase
+      window: 100  # Steps
+
+    # Alert if validation metric drops
+    - type: "metric_drop"
+      metric: "val/map"
+      threshold: 0.05  # Absolute drop
+
+    # Alert if GPU memory exceeds threshold
+    - type: "gpu_memory"
+      threshold: 0.95  # 95% of available memory
+
+  # Notification channels
+  notifications:
+    email: null  # Your email
+    slack: null  # Slack webhook URL
+
+# Sweep configuration (for hyperparameter tuning)
+sweep:
+  enabled: false
+  method: "bayes"  # "grid", "random", "bayes"
+  metric:
+    name: "val/map"
+    goal: "maximize"
+
+  # Parameters to sweep
+  parameters:
+    learning_rate:
+      distribution: "log_uniform_values"
+      min: 1e-5
+      max: 1e-3
+
+    batch_size:
+      values: [16, 32, 64, 128]
+
+    weight_decay:
+      distribution: "uniform"
+      min: 0.0
+      max: 0.1
+
+    warmup_epochs:
+      values: [5, 10, 20]
+
+# Export configuration
+export:
+  # Export run data
+  enabled: false
+  format: "json"  # "json", "csv"
+  path: "exports/"
+
+  # What to export
+  include:
+    - metrics
+    - hyperparameters
+    - system_metrics
+    - artifacts
+
+# Debugging
+debug:
+  # Dry run mode (don't actually log to wandb)
+  dry_run: false
+
+  # Verbose logging
+  verbose: false
+
+  # Log to local files for debugging
+  log_local: false
+  local_path: "logs/debug/"

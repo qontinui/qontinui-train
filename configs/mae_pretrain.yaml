@@ -1,0 +1,119 @@
+# Masked Autoencoder (MAE) Pre-training Configuration
+# For self-supervised pre-training on unlabeled GUI screenshots
+# Architecture: ViT-Base encoder with lightweight decoder
+
+# Model Architecture
+model:
+  name: "mae_vit_base"
+  type: "pretraining"  # pretraining, supervised
+
+  # MAE-specific configuration
+  mask_ratio: 0.75  # Percentage of patches to mask
+  masking_strategy: "random"  # random, structured, element-aware
+
+  # Encoder (ViT-Base)
+  encoder:
+    patch_size: 16
+    img_size: 224
+    in_channels: 3
+    embed_dim: 768
+    depth: 12
+    num_heads: 12
+    mlp_ratio: 4.0
+    dropout: 0.0
+    attention_dropout: 0.0
+
+  # Decoder (lightweight)
+  decoder:
+    embed_dim: 512  # Can be smaller than encoder
+    depth: 8
+    num_heads: 16
+    mlp_ratio: 4.0
+
+# Training Configuration
+training:
+  num_epochs: 300
+  batch_size: 2048  # Large batch for pre-training
+  num_gpus: 8
+
+  # Optimizer
+  optimizer:
+    type: "adamw"
+    learning_rate: 1.5e-4
+    weight_decay: 0.05
+    betas: [0.9, 0.95]
+
+  # Learning Rate Scheduler
+  scheduler:
+    type: "cosine"
+    warmup_epochs: 40
+    min_lr: 1.0e-5
+
+  # Mixed Precision Training
+  mixed_precision: true
+  precision: "bf16"
+
+  # Gradient Accumulation
+  gradient_accumulation_steps: 1
+
+  # Checkpointing
+  save_interval: 50
+  save_best: false  # Pre-training doesn't have validation
+
+# Data Configuration
+data:
+  dataset: "unlabeled_gui"
+  data_path: "data/synthetic"  # Synthetic UI data
+  num_workers: 16  # High parallelism for data loading
+  prefetch_factor: 2
+
+  # Image preprocessing
+  image_size: 224
+
+  # Data augmentation (important for MAE pre-training)
+  augmentation:
+    random_resize_crop: true
+    random_flip: true
+    color_jitter: true
+    gaussian_blur: true
+
+  # No validation split needed for pre-training
+
+# Loss Configuration
+loss:
+  type: "mse"  # Mean Squared Error for patch reconstruction
+  normalize: true  # Normalize per-patch
+  loss_only_masked: true  # Only compute loss on masked patches (key for MAE)
+
+# Logging and Monitoring
+logging:
+  use_wandb: true
+  project_name: "qontinui-train"
+  experiment_name: "mae_vit_base_pretrain"
+  log_interval: 100
+
+  checkpoint_dir: "checkpoints/mae_vit_base"
+
+  # Loss tracking
+  track_loss_per_scale: false
+
+# Hardware Configuration
+hardware:
+  device: "cuda"
+  num_gpus: 8
+  distributed: true
+
+  # Memory optimization for large batches
+  gradient_checkpointing: true
+  autocast_enabled: true
+  enable_tf32: true  # For A100/H100
+
+# Reproducibility
+reproducibility:
+  seed: 42
+  deterministic: true
+
+# Pre-training Specifics
+pretraining:
+  save_intermediate_models: true  # Save checkpoints for transfer learning
+  extract_features_interval: 50  # Extract features for analysis
