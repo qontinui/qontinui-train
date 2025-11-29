@@ -59,7 +59,7 @@ class GUIDetectionTrainer:
         val_loader: DataLoader,
         optimizer: optim.Optimizer,
         scheduler: Optional[optim.lr_scheduler.LRScheduler] = None,
-        device: str = 'cuda',
+        device: str = "cuda",
         num_gpus: int = 1,
         mixed_precision: bool = False,
         accumulation_steps: int = 1,
@@ -106,7 +106,7 @@ class GUIDetectionTrainer:
     def train(
         self,
         num_epochs: int,
-        checkpoint_dir: str = 'checkpoints',
+        checkpoint_dir: str = "checkpoints",
         save_interval: int = 10,
     ) -> None:
         """Complete training loop.
@@ -187,6 +187,6 @@ def main(args: argparse.Namespace) -> None:
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = create_parser().parse_args()
     main(args)

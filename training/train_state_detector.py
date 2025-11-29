@@ -62,7 +62,7 @@ class StateDetectionTrainer:
                 - evaluation: Evaluation settings
         """
         self.config = config
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         logger.info(f"Using device: {self.device}")
 
         # Initialize models
@@ -199,11 +199,7 @@ class StateDetectionTrainer:
         if self.transition_predictor is not None:
             self.transition_predictor.train()
 
-        epoch_metrics = {
-            'rpn_loss': 0.0,
-            'transition_loss': 0.0,
-            'total_loss': 0.0
-        }
+        epoch_metrics = {"rpn_loss": 0.0, "transition_loss": 0.0, "total_loss": 0.0}
 
         # TODO: Implement training loop
         # for batch_idx, batch in enumerate(train_loader):
@@ -247,10 +243,10 @@ class StateDetectionTrainer:
             self.transition_predictor.eval()
 
         val_metrics = {
-            'state_accuracy': 0.0,
-            'transition_accuracy': 0.0,
-            'region_precision': 0.0,
-            'region_recall': 0.0
+            "state_accuracy": 0.0,
+            "transition_accuracy": 0.0,
+            "region_precision": 0.0,
+            "region_recall": 0.0,
         }
 
         # TODO: Implement validation loop
@@ -279,21 +275,29 @@ class StateDetectionTrainer:
             is_best: Whether this is the best model so far
         """
         checkpoint = {
-            'epoch': self.current_epoch,
-            'global_step': self.global_step,
-            'rpn_state_dict': self.rpn.state_dict() if self.rpn else None,
-            'tp_state_dict': self.transition_predictor.state_dict() if self.transition_predictor else None,
-            'rpn_optimizer': self.rpn_optimizer.state_dict() if self.rpn_optimizer else None,
-            'tp_optimizer': self.tp_optimizer.state_dict() if self.tp_optimizer else None,
-            'best_val_accuracy': self.best_val_accuracy,
-            'config': self.config
+            "epoch": self.current_epoch,
+            "global_step": self.global_step,
+            "rpn_state_dict": self.rpn.state_dict() if self.rpn else None,
+            "tp_state_dict": (
+                self.transition_predictor.state_dict()
+                if self.transition_predictor
+                else None
+            ),
+            "rpn_optimizer": (
+                self.rpn_optimizer.state_dict() if self.rpn_optimizer else None
+            ),
+            "tp_optimizer": (
+                self.tp_optimizer.state_dict() if self.tp_optimizer else None
+            ),
+            "best_val_accuracy": self.best_val_accuracy,
+            "config": self.config,
         }
 
         torch.save(checkpoint, filepath)
         logger.info(f"Saved checkpoint to {filepath}")
 
         if is_best:
-            best_path = filepath.parent / 'best_model.pt'
+            best_path = filepath.parent / "best_model.pt"
             torch.save(checkpoint, best_path)
             logger.info(f"Saved best model to {best_path}")
 
@@ -307,18 +311,18 @@ class StateDetectionTrainer:
         logger.info(f"Loading checkpoint from {filepath}")
         checkpoint = torch.load(filepath, map_location=self.device)
 
-        self.current_epoch = checkpoint['epoch']
-        self.global_step = checkpoint['global_step']
-        self.best_val_accuracy = checkpoint['best_val_accuracy']
+        self.current_epoch = checkpoint["epoch"]
+        self.global_step = checkpoint["global_step"]
+        self.best_val_accuracy = checkpoint["best_val_accuracy"]
 
-        if self.rpn and checkpoint['rpn_state_dict']:
-            self.rpn.load_state_dict(checkpoint['rpn_state_dict'])
-        if self.transition_predictor and checkpoint['tp_state_dict']:
-            self.transition_predictor.load_state_dict(checkpoint['tp_state_dict'])
-        if self.rpn_optimizer and checkpoint['rpn_optimizer']:
-            self.rpn_optimizer.load_state_dict(checkpoint['rpn_optimizer'])
-        if self.tp_optimizer and checkpoint['tp_optimizer']:
-            self.tp_optimizer.load_state_dict(checkpoint['tp_optimizer'])
+        if self.rpn and checkpoint["rpn_state_dict"]:
+            self.rpn.load_state_dict(checkpoint["rpn_state_dict"])
+        if self.transition_predictor and checkpoint["tp_state_dict"]:
+            self.transition_predictor.load_state_dict(checkpoint["tp_state_dict"])
+        if self.rpn_optimizer and checkpoint["rpn_optimizer"]:
+            self.rpn_optimizer.load_state_dict(checkpoint["rpn_optimizer"])
+        if self.tp_optimizer and checkpoint["tp_optimizer"]:
+            self.tp_optimizer.load_state_dict(checkpoint["tp_optimizer"])
 
         logger.info(f"Resumed from epoch {self.current_epoch}")
 
@@ -334,7 +338,7 @@ class StateDetectionTrainer:
         self.setup_optimizers()
 
         # Training loop
-        for epoch in range(self.current_epoch, self.config['training']['num_epochs']):
+        for epoch in range(self.current_epoch, self.config["training"]["num_epochs"]):
             self.current_epoch = epoch
             logger.info(f"\nEpoch {epoch + 1}/{self.config['training']['num_epochs']}")
 
@@ -343,16 +347,19 @@ class StateDetectionTrainer:
             logger.info(f"Training metrics: {train_metrics}")
 
             # Validate
-            if (epoch + 1) % self.config['training']['val_frequency'] == 0:
+            if (epoch + 1) % self.config["training"]["val_frequency"] == 0:
                 val_metrics = self.validate(val_loader)
                 logger.info(f"Validation metrics: {val_metrics}")
 
                 # Save checkpoint
-                is_best = val_metrics['state_accuracy'] > self.best_val_accuracy
+                is_best = val_metrics["state_accuracy"] > self.best_val_accuracy
                 if is_best:
-                    self.best_val_accuracy = val_metrics['state_accuracy']
+                    self.best_val_accuracy = val_metrics["state_accuracy"]
 
-                checkpoint_path = Path(self.config['training']['checkpoint_dir']) / f'checkpoint_epoch_{epoch+1}.pt'
+                checkpoint_path = (
+                    Path(self.config["training"]["checkpoint_dir"])
+                    / f"checkpoint_epoch_{epoch+1}.pt"
+                )
                 self.save_checkpoint(checkpoint_path, is_best=is_best)
 
             # Update learning rate
@@ -377,28 +384,28 @@ def load_config(config_path: str) -> Dict[str, Any]:
     # TODO: Implement config loading
     # For now, return a default config
     return {
-        'model': {
-            'backbone_dim': 768,
-            'num_anchors': 9,
-            'proposal_count': 100,
-            'feature_dim': 768,
-            'hidden_dim': 512,
-            'num_states': 10
+        "model": {
+            "backbone_dim": 768,
+            "num_anchors": 9,
+            "proposal_count": 100,
+            "feature_dim": 768,
+            "hidden_dim": 512,
+            "num_states": 10,
         },
-        'data': {
-            'train_dir': 'data/screenshot_sequences/train',
-            'val_dir': 'data/screenshot_sequences/val',
-            'sequence_length': 5,
+        "data": {
+            "train_dir": "data/screenshot_sequences/train",
+            "val_dir": "data/screenshot_sequences/val",
+            "sequence_length": 5,
         },
-        'training': {
-            'batch_size': 8,
-            'num_epochs': 100,
-            'learning_rate': 1e-4,
-            'weight_decay': 1e-5,
-            'num_workers': 4,
-            'val_frequency': 5,
-            'checkpoint_dir': 'checkpoints/state_detection'
-        }
+        "training": {
+            "batch_size": 8,
+            "num_epochs": 100,
+            "learning_rate": 1e-4,
+            "weight_decay": 1e-5,
+            "num_workers": 4,
+            "val_frequency": 5,
+            "checkpoint_dir": "checkpoints/state_detection",
+        },
     }
 
 
@@ -406,24 +413,21 @@ def main():
     """
     Main entry point for training script.
     """
-    parser = argparse.ArgumentParser(description='Train state detection models')
+    parser = argparse.ArgumentParser(description="Train state detection models")
     parser.add_argument(
-        '--config',
+        "--config",
         type=str,
-        default='configs/state_detection.yaml',
-        help='Path to configuration file'
+        default="configs/state_detection.yaml",
+        help="Path to configuration file",
     )
     parser.add_argument(
-        '--resume',
-        type=str,
-        default=None,
-        help='Path to checkpoint to resume from'
+        "--resume", type=str, default=None, help="Path to checkpoint to resume from"
     )
     parser.add_argument(
-        '--device',
+        "--device",
         type=str,
-        default='cuda',
-        help='Device to use for training (cuda/cpu)'
+        default="cuda",
+        help="Device to use for training (cuda/cpu)",
     )
 
     args = parser.parse_args()
@@ -433,7 +437,7 @@ def main():
 
     # Override device if specified
     if args.device:
-        config['device'] = args.device
+        config["device"] = args.device
 
     # Initialize trainer
     trainer = StateDetectionTrainer(config)
@@ -446,5 +450,5 @@ def main():
     trainer.train()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

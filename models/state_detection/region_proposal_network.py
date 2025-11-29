@@ -50,7 +50,7 @@ class RegionProposalNetwork(nn.Module):
         num_anchors: int = 9,
         feature_stride: int = 16,
         proposal_count: int = 100,
-        nms_threshold: float = 0.7
+        nms_threshold: float = 0.7,
     ):
         super().__init__()
         self.backbone_dim = backbone_dim
@@ -70,8 +70,7 @@ class RegionProposalNetwork(nn.Module):
         self.reg_head = nn.Conv2d(512, num_anchors * 4, kernel_size=1)
 
     def forward(
-        self,
-        features: torch.Tensor
+        self, features: torch.Tensor
     ) -> Tuple[List[torch.Tensor], List[torch.Tensor]]:
         """
         Forward pass to generate region proposals.
@@ -106,7 +105,7 @@ class RegionProposalNetwork(nn.Module):
         self,
         feature_shape: Tuple[int, int],
         scales: List[float] = [0.5, 1.0, 2.0],
-        ratios: List[float] = [0.5, 1.0, 2.0]
+        ratios: List[float] = [0.5, 1.0, 2.0],
     ) -> torch.Tensor:
         """
         Generate anchor boxes for the feature map.
@@ -122,11 +121,7 @@ class RegionProposalNetwork(nn.Module):
         # TODO: Implement anchor generation
         pass
 
-    def apply_deltas(
-        self,
-        anchors: torch.Tensor,
-        deltas: torch.Tensor
-    ) -> torch.Tensor:
+    def apply_deltas(self, anchors: torch.Tensor, deltas: torch.Tensor) -> torch.Tensor:
         """
         Apply bounding box deltas to anchors to generate proposals.
 
@@ -141,9 +136,7 @@ class RegionProposalNetwork(nn.Module):
         pass
 
     def filter_proposals(
-        self,
-        proposals: torch.Tensor,
-        scores: torch.Tensor
+        self, proposals: torch.Tensor, scores: torch.Tensor
     ) -> Tuple[torch.Tensor, torch.Tensor]:
         """
         Filter proposals using NMS and score thresholding.

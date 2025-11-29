@@ -14,11 +14,11 @@ Project: qontinui-train - Foundation model training for GUI understanding
 from .experiment_tracking import (
     ExperimentTracker,
     WandbCallback,
-    setup_experiment_tracking
+    setup_experiment_tracking,
 )
 
 __all__ = [
-    'ExperimentTracker',
-    'WandbCallback',
-    'setup_experiment_tracking',
+    "ExperimentTracker",
+    "WandbCallback",
+    "setup_experiment_tracking",
 ]

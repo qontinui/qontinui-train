@@ -192,7 +192,10 @@ class ViTDetector(nn.Module):
         self,
         x: torch.Tensor,
         return_features: bool = False,
-    ) -> Tuple[torch.Tensor, torch.Tensor] | Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    ) -> (
+        Tuple[torch.Tensor, torch.Tensor]
+        | Tuple[torch.Tensor, torch.Tensor, torch.Tensor]
+    ):
         """Forward pass for detection.
 
         Args:
