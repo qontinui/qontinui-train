@@ -53,8 +53,8 @@ class PretrainingTrainer:
         self,
         model: nn.Module,
         train_loader: DataLoader,
-        method: str = 'mae',
-        device: str = 'cuda',
+        method: str = "mae",
+        device: str = "cuda",
         num_gpus: int = 1,
     ) -> None:
         """Initialize pre-training trainer."""
@@ -85,7 +85,7 @@ class PretrainingTrainer:
     def pretrain(
         self,
         num_epochs: int,
-        checkpoint_dir: str = 'checkpoints/pretrain',
+        checkpoint_dir: str = "checkpoints/pretrain",
     ) -> None:
         """Complete pre-training loop.
 
@@ -143,7 +143,7 @@ class MAEPretrainer(PretrainingTrainer):
         mask_ratio: float = 0.75,
     ) -> None:
         """Initialize MAE pre-trainer."""
-        super().__init__(model, train_loader, method='mae')
+        super().__init__(model, train_loader, method="mae")
         # TODO: Implement MAE-specific initialization
         # - Set mask ratio
         # - Create loss function for reconstruction
@@ -186,7 +186,7 @@ class ContrastivePretrainer(PretrainingTrainer):
         self,
         model: nn.Module,
         train_loader: DataLoader,
-        method: str = 'simclr',
+        method: str = "simclr",
         temperature: float = 0.07,
         use_memory_bank: bool = False,
     ) -> None:
@@ -245,6 +245,6 @@ def main(args: argparse.Namespace) -> None:
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = create_parser().parse_args()
     main(args)

@@ -40,8 +40,8 @@ class IoUCalculator:
 
     def __init__(
         self,
-        box_format: str = 'xyxy',
-        iou_type: str = 'standard',
+        box_format: str = "xyxy",
+        iou_type: str = "standard",
     ) -> None:
         """Initialize IoU calculator."""
         super().__init__()
@@ -158,7 +158,7 @@ class PrecisionRecallCalculator:
         self,
         recalls: np.ndarray,
         precisions: np.ndarray,
-        interpolation: str = '11-point',
+        interpolation: str = "11-point",
     ) -> float:
         """Compute Average Precision from PR curve.
 

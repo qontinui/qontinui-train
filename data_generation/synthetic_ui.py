@@ -54,8 +54,8 @@ class UILayoutGenerator:
         self,
         width: int = 1024,
         height: int = 768,
-        platform: str = 'web',
-        complexity: str = 'medium',
+        platform: str = "web",
+        complexity: str = "medium",
     ) -> None:
         """Initialize layout generator."""
         super().__init__()
@@ -98,8 +98,8 @@ class UIStyler:
 
     def __init__(
         self,
-        style: str = 'material',
-        theme: str = 'light',
+        style: str = "material",
+        theme: str = "light",
     ) -> None:
         """Initialize styler."""
         super().__init__()
@@ -153,7 +153,7 @@ class UIRenderer:
         renderer_type: Rendering backend ('pil', 'browser', 'game')
     """
 
-    def __init__(self, renderer_type: str = 'pil') -> None:
+    def __init__(self, renderer_type: str = "pil") -> None:
         """Initialize renderer."""
         super().__init__()
         # TODO: Implement renderer initialization
@@ -240,8 +240,8 @@ class UIGenerator:
         self,
         width: int = 1024,
         height: int = 768,
-        platform: str = 'web',
-        style: str = 'material',
+        platform: str = "web",
+        style: str = "material",
         num_classes: int = 10,
     ) -> None:
         """Initialize UI generator."""
@@ -290,8 +290,8 @@ class UIGenerator:
 def generate_dataset(
     output_dir: str,
     num_samples: int = 10000,
-    platform: str = 'web',
-    style: str = 'material',
+    platform: str = "web",
+    style: str = "material",
     batch_size: int = 32,
 ) -> None:
     """Generate complete dataset of synthetic UIs.
@@ -341,6 +341,6 @@ def main(args: argparse.Namespace) -> None:
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = create_parser().parse_args()
     main(args)

@@ -211,7 +211,7 @@ class DetectionHeadLoss(nn.Module):
     def __init__(
         self,
         num_classes: int = 10,
-        box_loss_type: str = 'l1',
+        box_loss_type: str = "l1",
         weight_dict: Optional[Dict[str, float]] = None,
     ) -> None:
         """Initialize detection loss."""

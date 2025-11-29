@@ -52,7 +52,7 @@ class TransitionPredictor(nn.Module):
         hidden_dim: int = 512,
         num_states: int = 10,
         sequence_length: int = 5,
-        dropout: float = 0.1
+        dropout: float = 0.1,
     ):
         super().__init__()
         self.feature_dim = feature_dim
@@ -67,15 +67,12 @@ class TransitionPredictor(nn.Module):
             num_layers=2,
             batch_first=True,
             dropout=dropout,
-            bidirectional=True
+            bidirectional=True,
         )
 
         # Attention mechanism for focusing on relevant frames
         self.attention = nn.MultiheadAttention(
-            embed_dim=hidden_dim * 2,
-            num_heads=8,
-            dropout=dropout,
-            batch_first=True
+            embed_dim=hidden_dim * 2, num_heads=8, dropout=dropout, batch_first=True
         )
 
         # State classification head
@@ -83,18 +80,16 @@ class TransitionPredictor(nn.Module):
             nn.Linear(hidden_dim * 2, hidden_dim),
             nn.ReLU(inplace=True),
             nn.Dropout(dropout),
-            nn.Linear(hidden_dim, num_states)
+            nn.Linear(hidden_dim, num_states),
         )
 
         # Transition matrix (learnable transition probabilities)
-        self.transition_matrix = nn.Parameter(
-            torch.randn(num_states, num_states)
-        )
+        self.transition_matrix = nn.Parameter(torch.randn(num_states, num_states))
 
     def forward(
         self,
         sequence_features: torch.Tensor,
-        state_labels: Optional[torch.Tensor] = None
+        state_labels: Optional[torch.Tensor] = None,
     ) -> Dict[str, torch.Tensor]:
         """
         Forward pass to predict state transitions.
@@ -116,9 +111,7 @@ class TransitionPredictor(nn.Module):
         encoded, (hidden, cell) = self.encoder(sequence_features)
 
         # Apply self-attention to focus on relevant frames
-        attended, attention_weights = self.attention(
-            encoded, encoded, encoded
-        )
+        attended, attention_weights = self.attention(encoded, encoded, encoded)
 
         # Generate predictions for each frame
         sequence_predictions = self.classifier(attended)
@@ -130,16 +123,14 @@ class TransitionPredictor(nn.Module):
         transition_probs = torch.softmax(self.transition_matrix, dim=1)
 
         return {
-            'predictions': next_state_pred,
-            'sequence_predictions': sequence_predictions,
-            'transition_probs': transition_probs,
-            'attention_weights': attention_weights
+            "predictions": next_state_pred,
+            "sequence_predictions": sequence_predictions,
+            "transition_probs": transition_probs,
+            "attention_weights": attention_weights,
         }
 
     def predict_transition(
-        self,
-        current_state: int,
-        sequence_features: torch.Tensor
+        self, current_state: int, sequence_features: torch.Tensor
     ) -> Tuple[int, float]:
         """
         Predict the next state given current state and sequence context.
@@ -154,13 +145,12 @@ class TransitionPredictor(nn.Module):
         """
         with torch.no_grad():
             output = self.forward(sequence_features)
-            predictions = output['predictions']
-            transition_probs = output['transition_probs']
+            predictions = output["predictions"]
+            transition_probs = output["transition_probs"]
 
             # Combine model prediction with learned transition probabilities
             combined_scores = (
-                predictions +
-                transition_probs[current_state].unsqueeze(0)
+                predictions + transition_probs[current_state].unsqueeze(0)
             ) / 2
 
             next_state = torch.argmax(combined_scores, dim=1).item()
@@ -173,7 +163,7 @@ class TransitionPredictor(nn.Module):
         predictions: torch.Tensor,
         targets: torch.Tensor,
         sequence_predictions: Optional[torch.Tensor] = None,
-        sequence_targets: Optional[torch.Tensor] = None
+        sequence_targets: Optional[torch.Tensor] = None,
     ) -> Dict[str, torch.Tensor]:
         """
         Compute training loss for transition prediction.
@@ -193,19 +183,16 @@ class TransitionPredictor(nn.Module):
         # Loss for next state prediction
         next_state_loss = nn.functional.cross_entropy(predictions, targets)
 
-        losses = {
-            'next_state_loss': next_state_loss,
-            'total_loss': next_state_loss
-        }
+        losses = {"next_state_loss": next_state_loss, "total_loss": next_state_loss}
 
         # Optional: Add sequence-level loss
         if sequence_predictions is not None and sequence_targets is not None:
             sequence_loss = nn.functional.cross_entropy(
                 sequence_predictions.reshape(-1, self.num_states),
-                sequence_targets.reshape(-1)
+                sequence_targets.reshape(-1),
             )
-            losses['sequence_loss'] = sequence_loss
-            losses['total_loss'] = next_state_loss + 0.5 * sequence_loss
+            losses["sequence_loss"] = sequence_loss
+            losses["total_loss"] = next_state_loss + 0.5 * sequence_loss
 
         return losses
 

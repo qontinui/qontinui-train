@@ -14,6 +14,6 @@ from .region_proposal_network import RegionProposalNetwork
 from .transition_predictor import TransitionPredictor
 
 __all__ = [
-    'RegionProposalNetwork',
-    'TransitionPredictor',
+    "RegionProposalNetwork",
+    "TransitionPredictor",
 ]

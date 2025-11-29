@@ -38,6 +38,7 @@ from torch.utils.data import DataLoader, DistributedSampler
 try:
     import pytorch_lightning as pl
     from pytorch_lightning.strategies import DDPStrategy
+
     HAS_LIGHTNING = True
 except ImportError:
     HAS_LIGHTNING = False
@@ -203,6 +204,6 @@ def main(args: argparse.Namespace) -> None:
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = create_parser().parse_args()
     main(args)

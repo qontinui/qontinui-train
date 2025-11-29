@@ -184,7 +184,7 @@ class BrowserRenderer(BaseRenderer):
         self,
         width: int = 1024,
         height: int = 768,
-        browser: str = 'selenium',
+        browser: str = "selenium",
         headless: bool = True,
     ) -> None:
         """Initialize browser renderer."""
@@ -269,7 +269,7 @@ class GameEngineRenderer(BaseRenderer):
         self,
         width: int = 1024,
         height: int = 768,
-        engine: str = 'unity',
+        engine: str = "unity",
     ) -> None:
         """Initialize game engine renderer."""
         super().__init__(width, height)
@@ -309,7 +309,7 @@ class RendererFactory:
 
     @staticmethod
     def create(
-        renderer_type: str = 'pil',
+        renderer_type: str = "pil",
         width: int = 1024,
         height: int = 768,
         **kwargs,

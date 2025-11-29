@@ -56,7 +56,7 @@ class DetectionEvaluator:
     def __init__(
         self,
         model: nn.Module,
-        device: str = 'cuda',
+        device: str = "cuda",
         num_classes: int = 10,
         iou_threshold: float = 0.5,
     ) -> None:
@@ -347,6 +347,6 @@ def main(args: argparse.Namespace) -> None:
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = create_parser().parse_args()
     main(args)

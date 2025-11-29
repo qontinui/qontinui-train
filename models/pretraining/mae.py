@@ -41,7 +41,7 @@ class PatchMasking(nn.Module):
         self,
         patch_size: int = 16,
         mask_ratio: float = 0.75,
-        masking_strategy: str = 'random',
+        masking_strategy: str = "random",
     ) -> None:
         """Initialize patch masking."""
         super().__init__()

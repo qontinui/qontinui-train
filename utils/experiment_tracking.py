@@ -15,6 +15,7 @@ import os
 
 try:
     import wandb
+
     WANDB_AVAILABLE = True
 except ImportError:
     WANDB_AVAILABLE = False
@@ -22,6 +23,7 @@ except ImportError:
 
 try:
     from pytorch_lightning.loggers import WandbLogger
+
     LIGHTNING_AVAILABLE = True
 except ImportError:
     LIGHTNING_AVAILABLE = False
@@ -41,7 +43,7 @@ class ExperimentTracker:
         self,
         config_path: Optional[Union[str, Path]] = None,
         backend: str = "wandb",
-        **kwargs
+        **kwargs,
     ):
         """
         Initialize experiment tracker.
@@ -71,29 +73,29 @@ class ExperimentTracker:
             print(f"Warning: Config file not found at {config_path}. Using defaults.")
             return {}
 
-        with open(config_path, 'r') as f:
+        with open(config_path, "r") as f:
             config = yaml.safe_load(f)
 
-        return config.get('wandb', {})
+        return config.get("wandb", {})
 
     def _init_wandb(self):
         """Initialize Weights & Biases."""
-        if not self.config.get('enabled', True):
+        if not self.config.get("enabled", True):
             print("wandb logging disabled in config")
             return
 
         # Extract wandb init parameters
         init_params = {
-            'project': self.config.get('project', 'qontinui-train'),
-            'entity': self.config.get('entity'),
-            'name': self.config.get('name'),
-            'group': self.config.get('group'),
-            'tags': self.config.get('tags', []),
-            'notes': self.config.get('notes', ''),
-            'mode': self.config.get('mode', 'online'),
-            'save_code': self.config.get('save_code', True),
-            'resume': self.config.get('resume', 'allow'),
-            'id': self.config.get('resume_id'),
+            "project": self.config.get("project", "qontinui-train"),
+            "entity": self.config.get("entity"),
+            "name": self.config.get("name"),
+            "group": self.config.get("group"),
+            "tags": self.config.get("tags", []),
+            "notes": self.config.get("notes", ""),
+            "mode": self.config.get("mode", "online"),
+            "save_code": self.config.get("save_code", True),
+            "resume": self.config.get("resume", "allow"),
+            "id": self.config.get("resume_id"),
         }
 
         # Remove None values
@@ -132,7 +134,7 @@ class ExperimentTracker:
         key: str,
         image: Any,
         caption: Optional[str] = None,
-        step: Optional[int] = None
+        step: Optional[int] = None,
     ):
         """
         Log an image.
@@ -151,7 +153,7 @@ class ExperimentTracker:
         images: List[Any],
         predictions: List[Dict[str, Any]],
         ground_truth: Optional[List[Dict[str, Any]]] = None,
-        step: Optional[int] = None
+        step: Optional[int] = None,
     ):
         """
         Log predictions with optional ground truth.
@@ -170,7 +172,7 @@ class ExperimentTracker:
         self,
         model_path: Union[str, Path],
         name: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Optional[Dict[str, Any]] = None,
     ):
         """
         Log model checkpoint as artifact.
@@ -182,9 +184,7 @@ class ExperimentTracker:
         """
         if self.backend == "wandb" and self.run is not None:
             artifact = wandb.Artifact(
-                name=name or "model",
-                type="model",
-                metadata=metadata or {}
+                name=name or "model", type="model", metadata=metadata or {}
             )
             artifact.add_file(str(model_path))
             self.run.log_artifact(artifact)
@@ -193,7 +193,7 @@ class ExperimentTracker:
         self,
         dataset_path: Union[str, Path],
         name: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Optional[Dict[str, Any]] = None,
     ):
         """
         Log dataset as artifact.
@@ -205,9 +205,7 @@ class ExperimentTracker:
         """
         if self.backend == "wandb" and self.run is not None:
             artifact = wandb.Artifact(
-                name=name or "dataset",
-                type="dataset",
-                metadata=metadata or {}
+                name=name or "dataset", type="dataset", metadata=metadata or {}
             )
 
             # Add directory or file
@@ -219,12 +217,7 @@ class ExperimentTracker:
 
             self.run.log_artifact(artifact)
 
-    def watch_model(
-        self,
-        model: Any,
-        log: str = "gradients",
-        log_freq: int = 1000
-    ):
+    def watch_model(self, model: Any, log: str = "gradients", log_freq: int = 1000):
         """
         Watch model gradients and parameters.
 
@@ -245,12 +238,16 @@ class ExperimentTracker:
         """
         if self.backend == "wandb" and LIGHTNING_AVAILABLE and WANDB_AVAILABLE:
             if self.logger is None:
-                lightning_config = self.config.get('lightning', {}).get('logger', {}).get('WandbLogger', {})
+                lightning_config = (
+                    self.config.get("lightning", {})
+                    .get("logger", {})
+                    .get("WandbLogger", {})
+                )
                 self.logger = WandbLogger(
-                    project=lightning_config.get('project', 'qontinui-train'),
-                    save_dir=lightning_config.get('save_dir', 'logs/wandb'),
-                    log_model=lightning_config.get('log_model', True),
-                    prefix=lightning_config.get('prefix', ''),
+                    project=lightning_config.get("project", "qontinui-train"),
+                    save_dir=lightning_config.get("save_dir", "logs/wandb"),
+                    log_model=lightning_config.get("log_model", True),
+                    prefix=lightning_config.get("prefix", ""),
                 )
             return self.logger
 
@@ -312,9 +309,7 @@ class WandbCallback:
 
 
 def setup_experiment_tracking(
-    config_path: Optional[Union[str, Path]] = None,
-    backend: str = "wandb",
-    **kwargs
+    config_path: Optional[Union[str, Path]] = None, backend: str = "wandb", **kwargs
 ) -> ExperimentTracker:
     """
     Convenience function to set up experiment tracking.
@@ -358,7 +353,7 @@ if __name__ == "__main__":
         project="qontinui-train",
         name="test_run",
         tags=["test"],
-        mode="disabled"  # Don't actually log for this test
+        mode="disabled",  # Don't actually log for this test
     )
 
     # Log some metrics
