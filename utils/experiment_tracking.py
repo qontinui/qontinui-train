@@ -8,10 +8,10 @@ Author: Joshua Spinak
 Project: qontinui-train - Foundation model training for GUI understanding
 """
 
-from typing import Dict, Any, Optional, List, Union
 from pathlib import Path
+from typing import Any, Dict, List, Optional, Union
+
 import yaml
-import os
 
 try:
     import wandb

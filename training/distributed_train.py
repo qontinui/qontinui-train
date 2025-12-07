@@ -26,14 +26,12 @@ References:
     - Accelerate: https://huggingface.co/docs/accelerate/
 """
 
-from typing import Optional, Dict, Any
 import argparse
-from pathlib import Path
+from typing import Any, Dict
 
 import torch
 import torch.nn as nn
-import torch.distributed as dist
-from torch.utils.data import DataLoader, DistributedSampler
+from torch.utils.data import DataLoader
 
 try:
     import pytorch_lightning as pl

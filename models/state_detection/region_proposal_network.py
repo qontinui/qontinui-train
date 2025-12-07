@@ -11,9 +11,10 @@ The RPN is designed to:
 3. Filter and rank proposals based on state-relevance scores
 """
 
+from typing import List, Tuple
+
 import torch
 import torch.nn as nn
-from typing import List, Tuple, Optional, Dict
 
 
 class RegionProposalNetwork(nn.Module):

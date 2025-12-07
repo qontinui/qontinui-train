@@ -14,14 +14,10 @@ Usage:
 import argparse
 import logging
 from pathlib import Path
-from typing import Dict, Any, Optional
-import json
+from typing import Any, Dict
 
 import torch
-import torch.nn as nn
 from torch.utils.data import DataLoader
-from torch.optim import AdamW
-from torch.optim.lr_scheduler import CosineAnnealingLR
 
 # TODO: Import actual modules once implemented
 # from models.state_detection import RegionProposalNetwork, TransitionPredictor

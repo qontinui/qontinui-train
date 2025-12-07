@@ -19,7 +19,8 @@ References:
     - YOLO Evaluation: https://github.com/ultralytics/yolov3/blob/master/utils/metrics.py
 """
 
-from typing import Tuple, List, Dict, Optional, Any
+from typing import Any, Dict, List, Optional, Tuple
+
 import numpy as np
 import torch
 

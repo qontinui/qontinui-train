@@ -18,12 +18,9 @@ References:
     - Training best practices: https://github.com/huggingface/pytorch-image-models
 """
 
-from typing import Optional, Dict, Any
 import argparse
-import os
-from pathlib import Path
+from typing import Dict, Optional
 
-import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader

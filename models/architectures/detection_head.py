@@ -11,7 +11,8 @@ The detection head predicts:
     - Optional: Confidence scores, instance masks, etc.
 """
 
-from typing import Optional, Tuple, Dict, Any
+from typing import Dict, Optional, Tuple
+
 import torch
 import torch.nn as nn
 

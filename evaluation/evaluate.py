@@ -28,9 +28,8 @@ References:
     - Detection metrics: https://arxiv.org/abs/1405.0312
 """
 
-from typing import Optional, Dict, List, Tuple, Any
 import argparse
-from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 import torch
 import torch.nn as nn

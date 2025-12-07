@@ -11,9 +11,10 @@ The transition predictor is designed to:
 4. Identify transition triggers (actions that cause state changes)
 """
 
+from typing import Dict, Optional, Tuple
+
 import torch
 import torch.nn as nn
-from typing import List, Tuple, Optional, Dict
 
 
 class TransitionPredictor(nn.Module):

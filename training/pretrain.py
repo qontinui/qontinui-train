@@ -24,9 +24,8 @@ References:
     - MoCo: https://arxiv.org/abs/1911.05722
 """
 
-from typing import Optional, Dict, Any
 import argparse
-from pathlib import Path
+from typing import Dict
 
 import torch
 import torch.nn as nn

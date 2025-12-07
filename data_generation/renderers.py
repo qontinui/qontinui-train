@@ -24,11 +24,10 @@ Usage:
     image = renderer.render_html(html_string)
 """
 
-from typing import Optional, Dict, Any, Tuple
 from abc import ABC, abstractmethod
+from typing import Any, Dict
 
 from PIL import Image, ImageDraw
-import numpy as np
 
 
 class BaseRenderer(ABC):
