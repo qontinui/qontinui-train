@@ -26,7 +26,7 @@ References:
 """
 
 import argparse
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 from PIL import Image
 
@@ -61,7 +61,7 @@ class UILayoutGenerator:
         # - Initialize layout algorithms
         # - Load component templates
 
-    def generate(self) -> Dict[str, Any]:
+    def generate(self) -> dict[str, Any]:
         """Generate random layout.
 
         Returns:
@@ -105,7 +105,7 @@ class UIStyler:
         # - Initialize color schemes
         # - Setup typography
 
-    def apply_style(self, layout: Dict[str, Any]) -> Dict[str, Any]:
+    def apply_style(self, layout: dict[str, Any]) -> dict[str, Any]:
         """Apply styling to layout.
 
         Args:
@@ -121,7 +121,7 @@ class UIStyler:
         # - Add textures and backgrounds
         pass
 
-    def randomize(self, layout: Dict[str, Any]) -> Dict[str, Any]:
+    def randomize(self, layout: dict[str, Any]) -> dict[str, Any]:
         """Apply domain randomization to styled layout.
 
         Args:
@@ -160,7 +160,7 @@ class UIRenderer:
 
     def render(
         self,
-        layout: Dict[str, Any],
+        layout: dict[str, Any],
     ) -> Image.Image:
         """Render layout to image.
 
@@ -198,7 +198,7 @@ class AnnotationExtractor:
         # - Load element class mappings
         # - Setup annotation format
 
-    def extract(self, layout: Dict[str, Any]) -> Dict[str, Any]:
+    def extract(self, layout: dict[str, Any]) -> dict[str, Any]:
         """Extract annotations from layout.
 
         Args:
@@ -249,7 +249,7 @@ class UIGenerator:
         # - Create renderer
         # - Create annotation extractor
 
-    def generate(self) -> Tuple[Image.Image, Dict[str, Any]]:
+    def generate(self) -> tuple[Image.Image, dict[str, Any]]:
         """Generate one UI example with annotations.
 
         Returns:
@@ -268,7 +268,7 @@ class UIGenerator:
     def generate_batch(
         self,
         batch_size: int = 32,
-    ) -> Tuple[List[Image.Image], List[Dict[str, Any]]]:
+    ) -> tuple[list[Image.Image], list[dict[str, Any]]]:
         """Generate batch of UI examples.
 
         Args:

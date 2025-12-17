@@ -11,7 +11,6 @@ The RPN is designed to:
 3. Filter and rank proposals based on state-relevance scores
 """
 
-from typing import List, Tuple
 
 import torch
 import torch.nn as nn
@@ -72,7 +71,7 @@ class RegionProposalNetwork(nn.Module):
 
     def forward(
         self, features: torch.Tensor
-    ) -> Tuple[List[torch.Tensor], List[torch.Tensor]]:
+    ) -> tuple[list[torch.Tensor], list[torch.Tensor]]:
         """
         Forward pass to generate region proposals.
 
@@ -104,9 +103,9 @@ class RegionProposalNetwork(nn.Module):
 
     def generate_anchors(
         self,
-        feature_shape: Tuple[int, int],
-        scales: List[float] = [0.5, 1.0, 2.0],
-        ratios: List[float] = [0.5, 1.0, 2.0],
+        feature_shape: tuple[int, int],
+        scales: list[float] = [0.5, 1.0, 2.0],
+        ratios: list[float] = [0.5, 1.0, 2.0],
     ) -> torch.Tensor:
         """
         Generate anchor boxes for the feature map.
@@ -138,7 +137,7 @@ class RegionProposalNetwork(nn.Module):
 
     def filter_proposals(
         self, proposals: torch.Tensor, scores: torch.Tensor
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
+    ) -> tuple[torch.Tensor, torch.Tensor]:
         """
         Filter proposals using NMS and score thresholding.
 

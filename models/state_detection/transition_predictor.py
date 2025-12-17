@@ -11,7 +11,6 @@ The transition predictor is designed to:
 4. Identify transition triggers (actions that cause state changes)
 """
 
-from typing import Dict, Optional, Tuple
 
 import torch
 import torch.nn as nn
@@ -90,8 +89,8 @@ class TransitionPredictor(nn.Module):
     def forward(
         self,
         sequence_features: torch.Tensor,
-        state_labels: Optional[torch.Tensor] = None,
-    ) -> Dict[str, torch.Tensor]:
+        state_labels: torch.Tensor | None = None,
+    ) -> dict[str, torch.Tensor]:
         """
         Forward pass to predict state transitions.
 
@@ -132,7 +131,7 @@ class TransitionPredictor(nn.Module):
 
     def predict_transition(
         self, current_state: int, sequence_features: torch.Tensor
-    ) -> Tuple[int, float]:
+    ) -> tuple[int, float]:
         """
         Predict the next state given current state and sequence context.
 
@@ -163,9 +162,9 @@ class TransitionPredictor(nn.Module):
         self,
         predictions: torch.Tensor,
         targets: torch.Tensor,
-        sequence_predictions: Optional[torch.Tensor] = None,
-        sequence_targets: Optional[torch.Tensor] = None,
-    ) -> Dict[str, torch.Tensor]:
+        sequence_predictions: torch.Tensor | None = None,
+        sequence_targets: torch.Tensor | None = None,
+    ) -> dict[str, torch.Tensor]:
         """
         Compute training loss for transition prediction.
 

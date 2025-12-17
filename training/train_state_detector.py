@@ -14,7 +14,7 @@ Usage:
 import argparse
 import logging
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import torch
 from torch.utils.data import DataLoader
@@ -46,7 +46,7 @@ class StateDetectionTrainer:
     - Tracks state-level metrics (not just element-level)
     """
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """
         Initialize trainer with configuration.
 
@@ -179,7 +179,7 @@ class StateDetectionTrainer:
 
         pass
 
-    def train_epoch(self, train_loader: DataLoader) -> Dict[str, float]:
+    def train_epoch(self, train_loader: DataLoader) -> dict[str, float]:
         """
         Train for one epoch.
 
@@ -222,7 +222,7 @@ class StateDetectionTrainer:
 
         return epoch_metrics
 
-    def validate(self, val_loader: DataLoader) -> Dict[str, float]:
+    def validate(self, val_loader: DataLoader) -> dict[str, float]:
         """
         Validate on validation set.
 
@@ -367,7 +367,7 @@ class StateDetectionTrainer:
         logger.info("Training completed!")
 
 
-def load_config(config_path: str) -> Dict[str, Any]:
+def load_config(config_path: str) -> dict[str, Any]:
     """
     Load configuration from YAML or JSON file.
 

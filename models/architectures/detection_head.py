@@ -11,7 +11,6 @@ The detection head predicts:
     - Optional: Confidence scores, instance masks, etc.
 """
 
-from typing import Dict, Optional, Tuple
 
 import torch
 import torch.nn as nn
@@ -95,8 +94,8 @@ class TransformerDetectionHead(nn.Module):
     def forward(
         self,
         features: torch.Tensor,
-        feature_mask: Optional[torch.Tensor] = None,
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
+        feature_mask: torch.Tensor | None = None,
+    ) -> tuple[torch.Tensor, torch.Tensor]:
         """Forward pass for detection.
 
         Args:
@@ -130,8 +129,8 @@ class RegionProposalHead(nn.Module):
         self,
         embed_dim: int = 768,
         num_classes: int = 10,
-        anchor_scales: Optional[list] = None,
-        anchor_ratios: Optional[list] = None,
+        anchor_scales: list | None = None,
+        anchor_ratios: list | None = None,
     ) -> None:
         """Initialize region proposal head."""
         super().__init__()
@@ -140,7 +139,7 @@ class RegionProposalHead(nn.Module):
         # - Create objectness and box regression heads
         # - Create NMS post-processing
 
-    def forward(self, features: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+    def forward(self, features: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         """Forward pass for region proposals.
 
         Args:
@@ -183,7 +182,7 @@ class MultiScaleDetectionHead(nn.Module):
     def forward(
         self,
         features_list: list[torch.Tensor],
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
+    ) -> tuple[torch.Tensor, torch.Tensor]:
         """Forward pass with multi-scale features.
 
         Args:
@@ -213,7 +212,7 @@ class DetectionHeadLoss(nn.Module):
         self,
         num_classes: int = 10,
         box_loss_type: str = "l1",
-        weight_dict: Optional[Dict[str, float]] = None,
+        weight_dict: dict[str, float] | None = None,
     ) -> None:
         """Initialize detection loss."""
         super().__init__()
@@ -228,8 +227,8 @@ class DetectionHeadLoss(nn.Module):
         box_preds: torch.Tensor,
         class_targets: torch.Tensor,
         box_targets: torch.Tensor,
-        valid_mask: Optional[torch.Tensor] = None,
-    ) -> Tuple[torch.Tensor, Dict[str, torch.Tensor]]:
+        valid_mask: torch.Tensor | None = None,
+    ) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
         """Compute detection losses.
 
         Args:

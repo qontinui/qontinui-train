@@ -29,7 +29,7 @@ References:
 """
 
 import argparse
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import torch
 import torch.nn as nn
@@ -69,7 +69,7 @@ class DetectionEvaluator:
     def evaluate(
         self,
         data_loader: DataLoader,
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """Evaluate model on dataset.
 
         Args:
@@ -87,9 +87,9 @@ class DetectionEvaluator:
 
     def compute_metrics(
         self,
-        predictions: List[Dict[str, Any]],
-        targets: List[Dict[str, Any]],
-    ) -> Dict[str, float]:
+        predictions: list[dict[str, Any]],
+        targets: list[dict[str, Any]],
+    ) -> dict[str, float]:
         """Compute detection metrics.
 
         Args:
@@ -111,7 +111,7 @@ class DetectionEvaluator:
         predictions: torch.Tensor,
         targets: torch.Tensor,
         iou_threshold: float = 0.5,
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
+    ) -> tuple[torch.Tensor, torch.Tensor]:
         """Match predicted detections to ground truth.
 
         Args:
@@ -158,8 +158,8 @@ class ZeroShotEvaluator(DetectionEvaluator):
     def evaluate_zero_shot(
         self,
         test_loader: DataLoader,
-        class_embeddings: Optional[torch.Tensor] = None,
-    ) -> Dict[str, float]:
+        class_embeddings: torch.Tensor | None = None,
+    ) -> dict[str, float]:
         """Evaluate zero-shot transfer.
 
         Args:
@@ -173,71 +173,6 @@ class ZeroShotEvaluator(DetectionEvaluator):
         # - Forward pass without fine-tuning
         # - Evaluate on target classes
         # - Compute generalization metrics
-        pass
-
-
-class FewShotEvaluator(DetectionEvaluator):
-    """Evaluator for few-shot learning.
-
-    Evaluates model fine-tuning on limited examples per class.
-    Tests sample efficiency and quick adaptation.
-
-    Args:
-        model: Model to fine-tune
-        num_support_examples: Number of examples per class for fine-tuning (e.g., 10)
-    """
-
-    def __init__(
-        self,
-        model: nn.Module,
-        num_support_examples: int = 10,
-        **kwargs,
-    ) -> None:
-        """Initialize few-shot evaluator."""
-        super().__init__(model, **kwargs)
-        # TODO: Implement few-shot initialization
-        # - Store support example count
-        # - Setup fine-tuning configuration
-
-    def evaluate_few_shot(
-        self,
-        support_loader: DataLoader,
-        query_loader: DataLoader,
-        finetune_epochs: int = 5,
-    ) -> Dict[str, float]:
-        """Evaluate few-shot learning.
-
-        Args:
-            support_loader: Support set (few examples per class)
-            query_loader: Query set (test data)
-            finetune_epochs: Number of fine-tuning epochs
-
-        Returns:
-            Few-shot metrics
-        """
-        # TODO: Implement few-shot evaluation
-        # - Fine-tune on support set
-        # - Evaluate on query set
-        # - Report metrics
-        pass
-
-    def finetune_on_support(
-        self,
-        support_loader: DataLoader,
-        finetune_epochs: int = 5,
-        learning_rate: float = 1e-4,
-    ) -> None:
-        """Fine-tune model on support set.
-
-        Args:
-            support_loader: Support set data loader
-            finetune_epochs: Number of fine-tuning epochs
-            learning_rate: Fine-tuning learning rate
-        """
-        # TODO: Implement fine-tuning
-        # - Create optimizer for few examples
-        # - Run training loop
-        # - Update model weights
         pass
 
 
@@ -259,7 +194,7 @@ class BenchmarkEvaluator:
     def __init__(
         self,
         model: nn.Module,
-        benchmarks: Optional[List[str]] = None,
+        benchmarks: list[str] | None = None,
     ) -> None:
         """Initialize benchmark evaluator."""
         super().__init__()
@@ -268,7 +203,7 @@ class BenchmarkEvaluator:
         # - Load benchmark datasets
         # - Create sub-evaluators
 
-    def run_all_benchmarks(self) -> Dict[str, Dict[str, float]]:
+    def run_all_benchmarks(self) -> dict[str, dict[str, float]]:
         """Run all benchmarks.
 
         Returns:
@@ -286,7 +221,7 @@ class BenchmarkEvaluator:
         self,
         batch_size: int = 1,
         num_iterations: int = 100,
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """Benchmark inference speed.
 
         Args:
@@ -303,7 +238,7 @@ class BenchmarkEvaluator:
         # - Compute FPS and latency
         pass
 
-    def report_results(self, results: Dict[str, Any]) -> None:
+    def report_results(self, results: dict[str, Any]) -> None:
         """Print formatted evaluation report.
 
         Args:

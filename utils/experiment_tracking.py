@@ -9,7 +9,7 @@ Project: qontinui-train - Foundation model training for GUI understanding
 """
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import yaml
 
@@ -41,7 +41,7 @@ class ExperimentTracker:
 
     def __init__(
         self,
-        config_path: Optional[Union[str, Path]] = None,
+        config_path: str | Path | None = None,
         backend: str = "wandb",
         **kwargs,
     ):
@@ -63,7 +63,7 @@ class ExperimentTracker:
         if backend == "wandb" and WANDB_AVAILABLE:
             self._init_wandb()
 
-    def _load_config(self, config_path: Optional[Union[str, Path]]) -> Dict[str, Any]:
+    def _load_config(self, config_path: str | Path | None) -> dict[str, Any]:
         """Load configuration from YAML file."""
         if config_path is None:
             config_path = Path(__file__).parent.parent / "configs" / "wandb_config.yaml"
@@ -73,7 +73,7 @@ class ExperimentTracker:
             print(f"Warning: Config file not found at {config_path}. Using defaults.")
             return {}
 
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config = yaml.safe_load(f)
 
         return config.get("wandb", {})
@@ -108,7 +108,7 @@ class ExperimentTracker:
         print(f"  Project: {self.run.project}")
         print(f"  URL: {self.run.url}")
 
-    def log_metrics(self, metrics: Dict[str, Any], step: Optional[int] = None):
+    def log_metrics(self, metrics: dict[str, Any], step: int | None = None):
         """
         Log metrics to tracking backend.
 
@@ -119,7 +119,7 @@ class ExperimentTracker:
         if self.backend == "wandb" and self.run is not None:
             wandb.log(metrics, step=step)
 
-    def log_hyperparameters(self, params: Dict[str, Any]):
+    def log_hyperparameters(self, params: dict[str, Any]):
         """
         Log hyperparameters.
 
@@ -133,8 +133,8 @@ class ExperimentTracker:
         self,
         key: str,
         image: Any,
-        caption: Optional[str] = None,
-        step: Optional[int] = None,
+        caption: str | None = None,
+        step: int | None = None,
     ):
         """
         Log an image.
@@ -150,10 +150,10 @@ class ExperimentTracker:
 
     def log_predictions(
         self,
-        images: List[Any],
-        predictions: List[Dict[str, Any]],
-        ground_truth: Optional[List[Dict[str, Any]]] = None,
-        step: Optional[int] = None,
+        images: list[Any],
+        predictions: list[dict[str, Any]],
+        ground_truth: list[dict[str, Any]] | None = None,
+        step: int | None = None,
     ):
         """
         Log predictions with optional ground truth.
@@ -170,9 +170,9 @@ class ExperimentTracker:
 
     def log_model(
         self,
-        model_path: Union[str, Path],
-        name: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        model_path: str | Path,
+        name: str | None = None,
+        metadata: dict[str, Any] | None = None,
     ):
         """
         Log model checkpoint as artifact.
@@ -191,9 +191,9 @@ class ExperimentTracker:
 
     def log_dataset(
         self,
-        dataset_path: Union[str, Path],
-        name: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        dataset_path: str | Path,
+        name: str | None = None,
+        metadata: dict[str, Any] | None = None,
     ):
         """
         Log dataset as artifact.
@@ -229,7 +229,7 @@ class ExperimentTracker:
         if self.backend == "wandb" and self.run is not None:
             wandb.watch(model, log=log, log_freq=log_freq)
 
-    def get_lightning_logger(self) -> Optional[Any]:
+    def get_lightning_logger(self) -> Any | None:
         """
         Get PyTorch Lightning logger for this backend.
 
@@ -283,7 +283,7 @@ class WandbCallback:
         """
         self.tracker = tracker
 
-    def on_train_begin(self, config: Dict[str, Any]):
+    def on_train_begin(self, config: dict[str, Any]):
         """Called at the beginning of training."""
         self.tracker.log_hyperparameters(config)
 
@@ -291,15 +291,15 @@ class WandbCallback:
         """Called at the beginning of each epoch."""
         pass
 
-    def on_batch_end(self, metrics: Dict[str, Any], step: int):
+    def on_batch_end(self, metrics: dict[str, Any], step: int):
         """Called at the end of each batch."""
         self.tracker.log_metrics(metrics, step=step)
 
-    def on_epoch_end(self, metrics: Dict[str, Any], epoch: int):
+    def on_epoch_end(self, metrics: dict[str, Any], epoch: int):
         """Called at the end of each epoch."""
         self.tracker.log_metrics(metrics, step=epoch)
 
-    def on_validation_end(self, metrics: Dict[str, Any], epoch: int):
+    def on_validation_end(self, metrics: dict[str, Any], epoch: int):
         """Called at the end of validation."""
         self.tracker.log_metrics(metrics, step=epoch)
 
@@ -309,7 +309,7 @@ class WandbCallback:
 
 
 def setup_experiment_tracking(
-    config_path: Optional[Union[str, Path]] = None, backend: str = "wandb", **kwargs
+    config_path: str | Path | None = None, backend: str = "wandb", **kwargs
 ) -> ExperimentTracker:
     """
     Convenience function to set up experiment tracking.

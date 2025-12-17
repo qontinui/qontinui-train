@@ -19,7 +19,6 @@ References:
 """
 
 import argparse
-from typing import Dict, Optional
 
 import torch.nn as nn
 import torch.optim as optim
@@ -55,7 +54,7 @@ class GUIDetectionTrainer:
         train_loader: DataLoader,
         val_loader: DataLoader,
         optimizer: optim.Optimizer,
-        scheduler: Optional[optim.lr_scheduler.LRScheduler] = None,
+        scheduler: optim.lr_scheduler.LRScheduler | None = None,
         device: str = "cuda",
         num_gpus: int = 1,
         mixed_precision: bool = False,
@@ -69,7 +68,7 @@ class GUIDetectionTrainer:
         # - Initialize mixed precision if enabled
         # - Setup logging and checkpointing
 
-    def train_epoch(self, epoch: int) -> Dict[str, float]:
+    def train_epoch(self, epoch: int) -> dict[str, float]:
         """Train for one epoch.
 
         Args:
@@ -87,7 +86,7 @@ class GUIDetectionTrainer:
         # - Log metrics and progress
         pass
 
-    def validate(self) -> Dict[str, float]:
+    def validate(self) -> dict[str, float]:
         """Validate on validation set.
 
         Returns:

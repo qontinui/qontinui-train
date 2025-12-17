@@ -18,7 +18,6 @@ References:
     - Official Implementation: https://github.com/facebookresearch/mae
 """
 
-from typing import Optional, Tuple
 
 import torch
 import torch.nn as nn
@@ -54,7 +53,7 @@ class PatchMasking(nn.Module):
         self,
         x: torch.Tensor,
         return_mask: bool = True,
-    ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[torch.Tensor]]:
+    ) -> tuple[torch.Tensor, torch.Tensor | None, torch.Tensor | None]:
         """Apply masking to patches.
 
         Args:
@@ -107,8 +106,8 @@ class MAEEncoder(nn.Module):
     def forward(
         self,
         x: torch.Tensor,
-        mask: Optional[torch.Tensor] = None,
-    ) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
+        mask: torch.Tensor | None = None,
+    ) -> tuple[torch.Tensor, torch.Tensor | None]:
         """Encode visible patches.
 
         Args:
@@ -226,7 +225,7 @@ class MaskedAutoencoder(nn.Module):
         # - Create decoder
         # - Initialize weights
 
-    def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+    def forward(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         """Forward pass for MAE.
 
         Args:

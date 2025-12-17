@@ -1,0 +1,52 @@
+[tool.poetry]
+name = "qontinui-train"
+version = "0.1.0"
+description = "ML training infrastructure for Qontinui"
+authors = ["Joshua Spinak <jspinak@hotmail.com>"]
+readme = "README.md"
+packages = [{include = "qontinui_train", from = "."}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+torch = "^2.0.0"
+torchvision = ">=0.15.0"
+opencv-python = "^4.8.0"
+numpy = "^1.24.0"
+pillow = ">=10.0.0,<13.0.0"
+tensorboard = "^2.14.0"
+pyyaml = "^6.0"
+qontinui = {path = "../qontinui", develop = true}
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3"
+black = "^24.10"
+isort = "^6.0"
+ruff = "^0.14"
+mypy = "^1.14"
+pre-commit = "^4.4"
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "C4", "UP"]
+ignore = ["E501"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

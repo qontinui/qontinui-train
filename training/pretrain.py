@@ -25,7 +25,6 @@ References:
 """
 
 import argparse
-from typing import Dict
 
 import torch
 import torch.nn as nn
@@ -64,7 +63,7 @@ class PretrainingTrainer:
         # - Setup loss functions
         # - Setup optimizer and scheduler
 
-    def pretrain_epoch(self, epoch: int) -> Dict[str, float]:
+    def pretrain_epoch(self, epoch: int) -> dict[str, float]:
         """Pre-train for one epoch.
 
         Args:
@@ -147,7 +146,7 @@ class MAEPretrainer(PretrainingTrainer):
         # - Set mask ratio
         # - Create loss function for reconstruction
 
-    def pretrain_epoch(self, epoch: int) -> Dict[str, float]:
+    def pretrain_epoch(self, epoch: int) -> dict[str, float]:
         """Pre-train MAE for one epoch.
 
         Args:
@@ -196,7 +195,7 @@ class ContrastivePretrainer(PretrainingTrainer):
         # - Create loss function (NT-Xent)
         # - Initialize momentum encoder if MoCo
 
-    def pretrain_epoch(self, epoch: int) -> Dict[str, float]:
+    def pretrain_epoch(self, epoch: int) -> dict[str, float]:
         """Pre-train with contrastive learning.
 
         Args:

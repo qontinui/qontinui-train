@@ -19,7 +19,7 @@ References:
     - YOLO Evaluation: https://github.com/ultralytics/yolov3/blob/master/utils/metrics.py
 """
 
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import numpy as np
 import torch
@@ -135,9 +135,9 @@ class PrecisionRecallCalculator:
 
     def compute_pr_curve(
         self,
-        predictions: List[Dict[str, Any]],
-        targets: List[Dict[str, Any]],
-    ) -> Tuple[np.ndarray, np.ndarray]:
+        predictions: list[dict[str, Any]],
+        targets: list[dict[str, Any]],
+    ) -> tuple[np.ndarray, np.ndarray]:
         """Compute precision-recall curve.
 
         Args:
@@ -212,7 +212,7 @@ class PerClassMetrics:
     def __init__(
         self,
         num_classes: int,
-        class_names: Optional[List[str]] = None,
+        class_names: list[str] | None = None,
     ) -> None:
         """Initialize per-class metrics tracker."""
         super().__init__()
@@ -237,7 +237,7 @@ class PerClassMetrics:
         # TODO: Implement result accumulation
         pass
 
-    def compute_metrics(self) -> Dict[int, Dict[str, float]]:
+    def compute_metrics(self) -> dict[int, dict[str, float]]:
         """Compute per-class metrics.
 
         Returns:
@@ -265,7 +265,7 @@ class MeanAveragePrecision:
 
     def __init__(
         self,
-        iou_thresholds: Optional[List[float]] = None,
+        iou_thresholds: list[float] | None = None,
         num_classes: int = 10,
     ) -> None:
         """Initialize mAP calculator."""
@@ -277,9 +277,9 @@ class MeanAveragePrecision:
 
     def evaluate(
         self,
-        predictions: List[Dict[str, Any]],
-        targets: List[Dict[str, Any]],
-    ) -> Dict[str, float]:
+        predictions: list[dict[str, Any]],
+        targets: list[dict[str, Any]],
+    ) -> dict[str, float]:
         """Compute mAP.
 
         Args:
@@ -297,9 +297,9 @@ class MeanAveragePrecision:
 
     def compute_map50_map95(
         self,
-        predictions: List[Dict[str, Any]],
-        targets: List[Dict[str, Any]],
-    ) -> Tuple[float, float]:
+        predictions: list[dict[str, Any]],
+        targets: list[dict[str, Any]],
+    ) -> tuple[float, float]:
         """Compute mAP50 and mAP95.
 
         Args:
@@ -317,7 +317,7 @@ class MeanAveragePrecision:
 def compute_box_metrics(
     pred_boxes: torch.Tensor,
     target_boxes: torch.Tensor,
-) -> Dict[str, float]:
+) -> dict[str, float]:
     """Compute various bounding box metrics.
 
     Args:

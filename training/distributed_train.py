@@ -27,7 +27,7 @@ References:
 """
 
 import argparse
-from typing import Any, Dict
+from typing import Any
 
 import torch
 import torch.nn as nn
@@ -125,7 +125,7 @@ class DistributedDetectionTrainer(nn.Module):
         pass
 
 
-def setup_distributed_training() -> Dict[str, Any]:
+def setup_distributed_training() -> dict[str, Any]:
     """Setup distributed training environment.
 
     Initializes:

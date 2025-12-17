@@ -16,7 +16,6 @@ References:
     - Vision Transformer implementations: https://github.com/huggingface/pytorch-image-models
 """
 
-from typing import Tuple
 
 import torch
 import torch.nn as nn
@@ -194,8 +193,8 @@ class ViTDetector(nn.Module):
         x: torch.Tensor,
         return_features: bool = False,
     ) -> (
-        Tuple[torch.Tensor, torch.Tensor]
-        | Tuple[torch.Tensor, torch.Tensor, torch.Tensor]
+        tuple[torch.Tensor, torch.Tensor]
+        | tuple[torch.Tensor, torch.Tensor, torch.Tensor]
     ):
         """Forward pass for detection.
 

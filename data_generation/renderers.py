@@ -25,7 +25,7 @@ Usage:
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict
+from typing import Any
 
 from PIL import Image, ImageDraw
 
@@ -51,7 +51,7 @@ class BaseRenderer(ABC):
         self.height = height
 
     @abstractmethod
-    def render(self, layout: Dict[str, Any]) -> Image.Image:
+    def render(self, layout: dict[str, Any]) -> Image.Image:
         """Render layout to image.
 
         Args:
@@ -101,7 +101,7 @@ class PILRenderer(BaseRenderer):
         # - Setup fonts
         # - Setup color schemes
 
-    def render(self, layout: Dict[str, Any]) -> Image.Image:
+    def render(self, layout: dict[str, Any]) -> Image.Image:
         """Render layout using PIL.
 
         Args:
@@ -120,7 +120,7 @@ class PILRenderer(BaseRenderer):
     def draw_element(
         self,
         draw: ImageDraw.ImageDraw,
-        element: Dict[str, Any],
+        element: dict[str, Any],
     ) -> None:
         """Draw single UI element.
 
@@ -193,7 +193,7 @@ class BrowserRenderer(BaseRenderer):
         # - Setup viewport size
         # - Configure rendering options
 
-    def render(self, layout: Dict[str, Any]) -> Image.Image:
+    def render(self, layout: dict[str, Any]) -> Image.Image:
         """Render layout using browser.
 
         Args:
@@ -225,7 +225,7 @@ class BrowserRenderer(BaseRenderer):
         # - Return image
         pass
 
-    def layout_to_html(self, layout: Dict[str, Any]) -> str:
+    def layout_to_html(self, layout: dict[str, Any]) -> str:
         """Convert layout description to HTML.
 
         Args:
@@ -276,7 +276,7 @@ class GameEngineRenderer(BaseRenderer):
         # - Connect to game engine
         # - Setup rendering parameters
 
-    def render(self, layout: Dict[str, Any]) -> Image.Image:
+    def render(self, layout: dict[str, Any]) -> Image.Image:
         """Render using game engine.
 
         Args:
