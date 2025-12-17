@@ -287,6 +287,8 @@ class ButtonYOLO:
             return self._export_yolov8_onnx(output_path, img_size, simplify)
         elif self.model_type == "yolov5":
             return self._export_yolov5_onnx(output_path, img_size, simplify)
+        else:
+            raise ValueError(f"Unsupported model type: {self.model_type}")
 
     def _export_yolov8_onnx(
         self, output_path: str, img_size: int, simplify: bool

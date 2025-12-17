@@ -149,20 +149,23 @@ class ButtonDatasetGenerator:
 
         if state == "hover":
             # Slightly lighter
-            return tuple(min(255, int(c * 1.1)) for c in (r, g, b))
+            r2, g2, b2 = (min(255, int(c * 1.1)) for c in (r, g, b))
+            return (r2, g2, b2)
         elif state == "pressed":
             # Darker
-            return tuple(int(c * 0.8) for c in (r, g, b))
+            r2, g2, b2 = (int(c * 0.8) for c in (r, g, b))
+            return (r2, g2, b2)
         elif state == "disabled":
             # Desaturated and lighter
             h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
-            r, g, b = colorsys.hsv_to_rgb(h, s * 0.3, v * 0.7)
-            return tuple(int(c * 255) for c in (r, g, b))
+            r_f, g_f, b_f = colorsys.hsv_to_rgb(h, s * 0.3, v * 0.7)
+            return (int(r_f * 255), int(g_f * 255), int(b_f * 255))
         elif state == "focus":
             # Slightly brighter
-            return tuple(min(255, int(c * 1.15)) for c in (r, g, b))
+            r2, g2, b2 = (min(255, int(c * 1.15)) for c in (r, g, b))
+            return (r2, g2, b2)
 
-        return color
+        return (r, g, b)
 
     def _draw_button(
         self,
@@ -297,7 +300,7 @@ class ButtonDatasetGenerator:
         text_color = (255, 255, 255) if brightness < 128 else (0, 0, 0)
 
         if state == "disabled":
-            text_color = tuple(int(c * 0.5) for c in text_color)
+            r, g, b = text_color; text_color = (int(r * 0.5), int(g * 0.5), int(b * 0.5))
 
         if style != "outlined":
             draw.text((text_x, text_y), label, fill=text_color, font=font)
@@ -492,7 +495,7 @@ class ButtonDatasetGenerator:
         train_ratio: float = 0.7,
         val_ratio: float = 0.15,
         test_ratio: float = 0.15,
-    ) -> dict[str, int]:
+    ) -> dict[str, dict[str, int]]:
         """
         Generate a complete dataset.
 

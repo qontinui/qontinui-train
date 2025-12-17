@@ -361,7 +361,7 @@ class ButtonDetectorInference:
         return all_predictions
 
     def apply_nms(
-        self, detections: list[dict[str, Any]], iou_threshold: float = None
+        self, detections: list[dict[str, Any]], iou_threshold: float | None = None
     ) -> list[dict[str, Any]]:
         """
         Apply Non-Maximum Suppression to detections

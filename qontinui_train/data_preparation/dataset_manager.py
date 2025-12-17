@@ -164,7 +164,7 @@ class DatasetManager:
 
         return all_stats
 
-    def verify_dataset(self, split: str | None = None) -> dict:
+    def verify_dataset(self, split: str | None = None) -> dict[str, Any]:
         """
         Verify dataset integrity and quality.
 
@@ -175,7 +175,7 @@ class DatasetManager:
             Dictionary of verification results
         """
         splits = [split] if split else ["train", "val", "test"]
-        results = {}
+        results: dict[str, Any] = {}
 
         for split_name in splits:
             dataset = self.load_coco_dataset(split_name)
@@ -261,7 +261,7 @@ class DatasetManager:
         test_ratio: float = 0.15,
         shuffle: bool = True,
         seed: int = 42,
-    ) -> dict[str, int]:
+    ) -> dict[str, dict[str, int]]:
         """
         Split a dataset into train/val/test sets.
 
@@ -522,7 +522,7 @@ names: ['button']  # class names
             dataset_paths: List of dataset directories to merge
             output_split: Output split name
         """
-        merged_dataset = {
+        merged_dataset: dict[str, Any] = {
             "info": {
                 "description": "Merged Button Detection Dataset",
                 "version": "1.0",

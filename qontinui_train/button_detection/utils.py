@@ -142,7 +142,7 @@ def visualize_annotations(
     image_path: str,
     annotations: list[dict[str, Any]],
     categories: dict[int, str],
-    output_path: str = None,
+    output_path: str | None = None,
 ) -> np.ndarray:
     """
     Visualize COCO annotations on image
@@ -237,7 +237,7 @@ def split_dataset(
     val_ratio: float = 0.1,
     test_ratio: float = 0.1,
     seed: int = 42,
-) -> tuple[str, str, str]:
+) -> tuple[str, str, str | None]:
     """
     Split COCO dataset into train/val/test sets
 

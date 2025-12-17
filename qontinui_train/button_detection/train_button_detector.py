@@ -93,7 +93,7 @@ class COCOButtonDataset(Dataset):
         self.categories = {cat["id"]: cat for cat in self.coco_data["categories"]}
 
         # Group annotations by image
-        self.image_annotations = {}
+        self.image_annotations: dict[int, list[Any]] = {}
         for ann in self.coco_data["annotations"]:
             img_id = ann["image_id"]
             if img_id not in self.image_annotations:
@@ -594,7 +594,7 @@ class ButtonDetectorTrainer:
 def load_config(config_path: str) -> dict[str, Any]:
     """Load configuration from YAML file"""
     with open(config_path) as f:
-        config = yaml.safe_load(f)
+        config: dict[str, Any] = yaml.safe_load(f)
     return config
 
 
