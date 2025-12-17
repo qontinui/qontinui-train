@@ -33,7 +33,7 @@ from typing import Any
 
 # Try to import PIL for image viewing
 try:
-    from PIL import Image, ImageDraw, ImageFont
+    from PIL import Image, ImageDraw
 
     PIL_AVAILABLE = True
 except ImportError:
@@ -169,7 +169,6 @@ class DatasetViewer:
 
                 entry = json.loads(line)
                 image_id = entry["id"]
-                image_path = self.dataset_dir / entry["image"]
                 ann_path = self.dataset_dir / entry["annotations"]
 
                 # Load annotations

@@ -88,11 +88,11 @@ class ButtonYOLO:
             # This will be done during training with data.yaml
             return model
 
-        except ImportError:
+        except ImportError as err:
             raise ImportError(
                 "ultralytics package required for YOLOv8. "
                 "Install with: pip install ultralytics"
-            )
+            ) from err
 
     def _load_yolov5(self, pretrained: bool):
         """Load YOLOv5 model from torch hub"""
@@ -113,7 +113,7 @@ class ButtonYOLO:
             return model.to(self.device)
 
         except Exception as e:
-            raise RuntimeError(f"Failed to load YOLOv5: {e}")
+            raise RuntimeError(f"Failed to load YOLOv5: {e}") from e
 
     def train(
         self,
@@ -324,11 +324,11 @@ class ButtonYOLO:
 
             return output_path
 
-        except ImportError:
+        except ImportError as err:
             raise ImportError(
                 "onnx and onnx-simplifier required for export. "
                 "Install with: pip install onnx onnx-simplifier"
-            )
+            ) from err
 
     def save(self, path: str):
         """Save model weights"""

@@ -82,12 +82,12 @@ class RegionProposalNetwork(nn.Module):
             proposals: List of proposal boxes for each image [N, 4]
             scores: Confidence scores for each proposal [N]
         """
-        # Apply convolutional layer
-        x = self.relu(self.conv(features))
+        # TODO: Apply convolutional layer
+        # x = self.relu(self.conv(features))
 
-        # Generate classification and regression outputs
-        cls_scores = self.cls_head(x)  # [B, num_anchors*2, H, W]
-        bbox_deltas = self.reg_head(x)  # [B, num_anchors*4, H, W]
+        # TODO: Generate classification and regression outputs
+        # cls_scores = self.cls_head(x)  # [B, num_anchors*2, H, W]
+        # bbox_deltas = self.reg_head(x)  # [B, num_anchors*4, H, W]
 
         # TODO: Implement anchor generation
         # TODO: Implement proposal generation from anchors and deltas
@@ -104,8 +104,8 @@ class RegionProposalNetwork(nn.Module):
     def generate_anchors(
         self,
         feature_shape: tuple[int, int],
-        scales: list[float] = [0.5, 1.0, 2.0],
-        ratios: list[float] = [0.5, 1.0, 2.0],
+        scales: list[float] | None = None,
+        ratios: list[float] | None = None,
     ) -> torch.Tensor:
         """
         Generate anchor boxes for the feature map.
@@ -118,6 +118,10 @@ class RegionProposalNetwork(nn.Module):
         Returns:
             anchors: Anchor boxes [N, 4] in (x1, y1, x2, y2) format
         """
+        if scales is None:
+            scales = [0.5, 1.0, 2.0]
+        if ratios is None:
+            ratios = [0.5, 1.0, 2.0]
         # TODO: Implement anchor generation
         pass
 

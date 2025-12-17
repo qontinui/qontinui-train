@@ -34,8 +34,7 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 
 try:
-    import pytorch_lightning as pl
-    from pytorch_lightning.strategies import DDPStrategy
+    import pytorch_lightning  # noqa: F401
 
     HAS_LIGHTNING = True
 except ImportError:
