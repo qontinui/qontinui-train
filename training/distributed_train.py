@@ -78,7 +78,7 @@ class DistributedDetectionTrainer(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass."""
         # TODO: Implement forward pass
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def training_step(self, batch: tuple, batch_idx: int) -> torch.Tensor:
         """PyTorch Lightning training step.
@@ -95,14 +95,14 @@ class DistributedDetectionTrainer(nn.Module):
         # - Forward pass
         # - Compute loss
         # - Log metrics
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def validation_step(self, batch: tuple, batch_idx: int) -> None:
         """PyTorch Lightning validation step."""
         # TODO: Implement validation step
         # - Compute metrics (mAP, etc.)
         # - Log metrics
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def configure_optimizers(self):
         """Configure optimizer and learning rate scheduler.
@@ -114,14 +114,14 @@ class DistributedDetectionTrainer(nn.Module):
         # - Create AdamW optimizer
         # - Create learning rate scheduler (cosine annealing, warmup)
         # - Return optimizer config
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def on_train_epoch_end(self) -> None:
         """Called at end of training epoch."""
         # TODO: Implement epoch-end logic
         # - Update learning rate if needed
         # - Log epoch metrics
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
 
 def setup_distributed_training() -> dict[str, Any]:
@@ -139,7 +139,7 @@ def setup_distributed_training() -> dict[str, Any]:
     # - Initialize process group (NCCL for GPU, GLOO for CPU)
     # - Get rank and world size
     # - Setup device
-    pass
+    raise NotImplementedError("Method not yet implemented")
 
 
 def create_distributed_sampler(
@@ -165,7 +165,7 @@ def create_distributed_sampler(
     # - Create DistributedSampler
     # - Create DataLoader with sampler
     # - Return loader
-    pass
+    raise NotImplementedError("Method not yet implemented")
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -181,7 +181,7 @@ def create_parser() -> argparse.ArgumentParser:
     # - Data arguments
     # - Distributed training arguments
     # - Logging arguments
-    pass
+    raise NotImplementedError("Method not yet implemented")
 
 
 def main(args: argparse.Namespace) -> None:
@@ -198,7 +198,7 @@ def main(args: argparse.Namespace) -> None:
     # - Create trainer
     # - Run training
     # - Save final model
-    pass
+    raise NotImplementedError("Method not yet implemented")
 
 
 if __name__ == "__main__":

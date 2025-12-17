@@ -18,8 +18,8 @@ from qontinui_train.button_detection.models.button_yolo import (
     create_button_yolo,
 )
 from qontinui_train.button_detection.train_button_detector import (
+    ButtonDetectorTrainer,
     COCOButtonDataset,
-    train_button_detector,
 )
 from qontinui_train.button_detection.utils import (
     analyze_dataset,
@@ -37,8 +37,8 @@ __all__ = [
     "create_button_cnn",
     "ButtonYOLO",
     "create_button_yolo",
+    "ButtonDetectorTrainer",
     "COCOButtonDataset",
-    "train_button_detector",
     "analyze_dataset",
     "coco_to_yolo",
     "create_yolo_data_yaml",

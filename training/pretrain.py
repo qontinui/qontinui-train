@@ -78,7 +78,7 @@ class PretrainingTrainer:
         # - Compute pre-training loss
         # - Backward pass and optimization
         # - Log metrics
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def pretrain(
         self,
@@ -96,7 +96,7 @@ class PretrainingTrainer:
         # - Call pretrain_epoch
         # - Save checkpoints periodically
         # - Log training progress
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def extract_features(
         self,
@@ -116,7 +116,7 @@ class PretrainingTrainer:
         # - Forward pass through model
         # - Extract features from specified layer
         # - Return concatenated features
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
 
 class MAEPretrainer(PretrainingTrainer):
@@ -161,7 +161,7 @@ class MAEPretrainer(PretrainingTrainer):
         # - Compute reconstruction loss
         # - Backward and optimize
         # - Log metrics
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
 
 class ContrastivePretrainer(PretrainingTrainer):
@@ -210,7 +210,7 @@ class ContrastivePretrainer(PretrainingTrainer):
         # - Compute contrastive loss
         # - Update momentum encoder (if MoCo)
         # - Log metrics
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -225,7 +225,7 @@ def create_parser() -> argparse.ArgumentParser:
     # - Data arguments
     # - Hyperparameter arguments
     # - Logging arguments
-    pass
+    raise NotImplementedError("Method not yet implemented")
 
 
 def main(args: argparse.Namespace) -> None:
@@ -240,7 +240,7 @@ def main(args: argparse.Namespace) -> None:
     # - Create pre-trainer
     # - Run pre-training
     # - Save pre-trained weights
-    pass
+    raise NotImplementedError("Method not yet implemented")
 
 
 if __name__ == "__main__":

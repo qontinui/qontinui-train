@@ -60,7 +60,7 @@ class BaseRenderer(ABC):
         Returns:
             PIL Image
         """
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
 
 class PILRenderer(BaseRenderer):
@@ -115,7 +115,7 @@ class PILRenderer(BaseRenderer):
         # - Draw background
         # - Recursively draw elements
         # - Return image
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def draw_element(
         self,
@@ -133,7 +133,7 @@ class PILRenderer(BaseRenderer):
         # - Draw appropriate shape (rect, circle, etc.)
         # - Draw text if applicable
         # - Apply styling
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def draw_text(
         self,
@@ -155,7 +155,7 @@ class PILRenderer(BaseRenderer):
         # TODO: Implement text drawing
         # - Load font
         # - Draw text with styling
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
 
 class BrowserRenderer(BaseRenderer):
@@ -207,7 +207,7 @@ class BrowserRenderer(BaseRenderer):
         # - Load HTML in browser
         # - Take screenshot
         # - Return as PIL Image
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def render_html(self, html: str) -> Image.Image:
         """Render HTML string directly.
@@ -223,7 +223,7 @@ class BrowserRenderer(BaseRenderer):
         # - Wait for rendering
         # - Take screenshot
         # - Return image
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def layout_to_html(self, layout: dict[str, Any]) -> str:
         """Convert layout description to HTML.
@@ -239,7 +239,7 @@ class BrowserRenderer(BaseRenderer):
         # - Add CSS styling
         # - Generate content
         # - Return HTML string
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
 
 class GameEngineRenderer(BaseRenderer):
@@ -290,7 +290,7 @@ class GameEngineRenderer(BaseRenderer):
         # - Instantiate UI elements
         # - Render and capture
         # - Return image
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
 
 class RendererFactory:
@@ -331,4 +331,4 @@ class RendererFactory:
         # - Map renderer_type to class
         # - Create and return instance
         # - Handle missing dependencies gracefully
-        pass
+        raise NotImplementedError("Method not yet implemented")

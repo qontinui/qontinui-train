@@ -10,6 +10,7 @@ import json
 import random
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 from PIL import Image, ImageDraw, ImageFont
 
@@ -141,7 +142,7 @@ class ButtonDatasetGenerator:
         }
 
     def _adjust_color_for_state(
-        self, color: tuple[int, int, int], state: str
+        self, color: tuple[int, ...], state: str
     ) -> tuple[int, int, int]:
         """Adjust button color based on state."""
         r, g, b = color
@@ -171,7 +172,7 @@ class ButtonDatasetGenerator:
         width: int,
         height: int,
         style: str,
-        color: tuple[int, int, int],
+        color: tuple[int, ...],
         shape: str,
         state: str,
         label: str,
@@ -372,7 +373,7 @@ class ButtonDatasetGenerator:
 
         return img
 
-    def generate_sample(self, split: str = "train", num_buttons: int = None) -> dict:
+    def generate_sample(self, split: str = "train", num_buttons: int | None = None) -> dict:
         """
         Generate a single screenshot sample with buttons.
 
@@ -399,7 +400,7 @@ class ButtonDatasetGenerator:
 
         # Generate buttons
         annotations = []
-        placed_buttons = []
+        placed_buttons: list[dict[str, Any]] = []
 
         for _i in range(num_buttons):
             # Button properties
@@ -424,9 +425,9 @@ class ButtonDatasetGenerator:
 
                 # Check for overlap
                 overlap = False
-                for bx, by, bw, bh in placed_buttons:
+                for btn in placed_buttons:
                     if not (
-                        x + width < bx or x > bx + bw or y + height < by or y > by + bh
+                        x + width < btn["x"] or x > btn["x"] + btn["w"] or y + height < btn["y"] or y > btn["y"] + btn["h"]
                     ):
                         overlap = True
                         break
@@ -443,7 +444,7 @@ class ButtonDatasetGenerator:
             )
 
             # Record button position
-            placed_buttons.append((x, y, width, height))
+            placed_buttons.append({"x": x, "y": y, "w": width, "h": height})
 
             # Create annotation
             annotation = {

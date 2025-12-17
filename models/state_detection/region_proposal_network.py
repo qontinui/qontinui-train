@@ -123,7 +123,7 @@ class RegionProposalNetwork(nn.Module):
         if ratios is None:
             ratios = [0.5, 1.0, 2.0]
         # TODO: Implement anchor generation
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def apply_deltas(self, anchors: torch.Tensor, deltas: torch.Tensor) -> torch.Tensor:
         """
@@ -137,7 +137,7 @@ class RegionProposalNetwork(nn.Module):
             proposals: Transformed boxes [N, 4]
         """
         # TODO: Implement delta application
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def filter_proposals(
         self, proposals: torch.Tensor, scores: torch.Tensor
@@ -154,4 +154,4 @@ class RegionProposalNetwork(nn.Module):
             filtered_scores: Corresponding scores
         """
         # TODO: Implement NMS and filtering
-        pass
+        raise NotImplementedError("Method not yet implemented")

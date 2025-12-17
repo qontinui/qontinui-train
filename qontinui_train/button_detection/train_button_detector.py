@@ -21,7 +21,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import yaml
+import yaml  # type: ignore[import-untyped]
 from PIL import Image
 from torch.utils.data import DataLoader, Dataset
 from torch.utils.tensorboard import SummaryWriter

@@ -75,7 +75,7 @@ class UILayoutGenerator:
         # - Recursively place components
         # - Add text content
         # - Return layout description
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
 
 class UIStyler:
@@ -119,7 +119,7 @@ class UIStyler:
         # - Add typography
         # - Add effects (shadows, borders, etc.)
         # - Add textures and backgrounds
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def randomize(self, layout: dict[str, Any]) -> dict[str, Any]:
         """Apply domain randomization to styled layout.
@@ -135,7 +135,7 @@ class UIStyler:
         # - Font size variations
         # - Spacing variations
         # - Element size variations
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
 
 class UIRenderer:
@@ -175,7 +175,7 @@ class UIRenderer:
         # - Draw elements recursively
         # - Apply effects
         # - Return PIL Image
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
 
 class AnnotationExtractor:
@@ -216,7 +216,7 @@ class AnnotationExtractor:
         # - Extract positions and sizes
         # - Map to class indices
         # - Return annotation dict
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
 
 class UIGenerator:
@@ -263,7 +263,7 @@ class UIGenerator:
         # - Render to image
         # - Extract annotations
         # - Return image and annotations
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def generate_batch(
         self,
@@ -281,7 +281,7 @@ class UIGenerator:
         # TODO: Implement batch generation
         # - Generate multiple examples
         # - Return lists of images and annotations
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
 
 def generate_dataset(
@@ -306,7 +306,7 @@ def generate_dataset(
     # - Generate samples in batches
     # - Save images and annotations
     # - Create dataset metadata
-    pass
+    raise NotImplementedError("Method not yet implemented")
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -322,7 +322,7 @@ def create_parser() -> argparse.ArgumentParser:
     # - Style selection
     # - Batch size
     # - Seed for reproducibility
-    pass
+    raise NotImplementedError("Method not yet implemented")
 
 
 def main(args: argparse.Namespace) -> None:
@@ -335,7 +335,7 @@ def main(args: argparse.Namespace) -> None:
     # - Create output directory
     # - Call generate_dataset with arguments
     # - Print statistics
-    pass
+    raise NotImplementedError("Method not yet implemented")
 
 
 if __name__ == "__main__":

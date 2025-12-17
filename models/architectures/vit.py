@@ -65,7 +65,7 @@ class ViTEmbedding(nn.Module):
         # - Extract patches and project to embed_dim
         # - Add positional embeddings
         # - Prepend [CLS] token
-        pass
+        raise NotImplementedError("ViTEmbedding.forward not yet implemented")
 
 
 class ViTTransformerBlock(nn.Module):
@@ -107,7 +107,7 @@ class ViTTransformerBlock(nn.Module):
             Output tensor of shape (batch_size, seq_len, embed_dim)
         """
         # TODO: Implement forward pass with residual connections
-        pass
+        raise NotImplementedError("ViTTransformerBlock.forward not yet implemented")
 
 
 class ViTBackbone(nn.Module):
@@ -152,7 +152,7 @@ class ViTBackbone(nn.Module):
             Feature tensor of shape (batch_size, seq_len, embed_dim)
         """
         # TODO: Implement forward pass through embedding and transformer blocks
-        pass
+        raise NotImplementedError("ViTBackbone.forward not yet implemented")
 
 
 class ViTDetector(nn.Module):
@@ -213,7 +213,7 @@ class ViTDetector(nn.Module):
         # - Extract features with backbone
         # - Apply detection head
         # - Return classification logits and box predictions
-        pass
+        raise NotImplementedError("ViTDetector.forward not yet implemented")
 
 
 def vit_base(num_classes: int = 10, pretrained: bool = False) -> ViTDetector:
@@ -229,7 +229,7 @@ def vit_base(num_classes: int = 10, pretrained: bool = False) -> ViTDetector:
     # TODO: Implement model creation
     # - Create ViT-Base configuration
     # - Load pretrained weights if specified
-    pass
+    raise NotImplementedError("vit_base not yet implemented")
 
 
 def vit_large(num_classes: int = 10, pretrained: bool = False) -> ViTDetector:
@@ -245,4 +245,4 @@ def vit_large(num_classes: int = 10, pretrained: bool = False) -> ViTDetector:
     # TODO: Implement model creation
     # - Create ViT-Large configuration
     # - Load pretrained weights if specified
-    pass
+    raise NotImplementedError("vit_large not yet implemented")

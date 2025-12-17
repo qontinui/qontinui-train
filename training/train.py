@@ -84,7 +84,7 @@ class GUIDetectionTrainer:
         # - Backward pass and optimization
         # - Handle gradient accumulation
         # - Log metrics and progress
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def validate(self) -> dict[str, float]:
         """Validate on validation set.
@@ -97,7 +97,7 @@ class GUIDetectionTrainer:
         # - Iterate over validation batches
         # - Compute metrics (mAP, precision, recall)
         # - Return metrics
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def train(
         self,
@@ -118,7 +118,7 @@ class GUIDetectionTrainer:
         # - Save checkpoints periodically
         # - Save best model based on validation metric
         # - Log all metrics
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def save_checkpoint(self, path: str, epoch: int, is_best: bool = False) -> None:
         """Save model checkpoint.
@@ -133,7 +133,7 @@ class GUIDetectionTrainer:
         # - Save optimizer state
         # - Save scheduler state
         # - Save epoch and hyperparameters
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def load_checkpoint(self, path: str) -> int:
         """Load model checkpoint.
@@ -149,7 +149,7 @@ class GUIDetectionTrainer:
         # - Load optimizer state
         # - Load scheduler state
         # - Return epoch to resume from
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -164,7 +164,7 @@ def create_parser() -> argparse.ArgumentParser:
     # - Data arguments
     # - Logging arguments
     # - Hardware arguments
-    pass
+    raise NotImplementedError("Method not yet implemented")
 
 
 def main(args: argparse.Namespace) -> None:
@@ -180,7 +180,7 @@ def main(args: argparse.Namespace) -> None:
     # - Create optimizer and scheduler
     # - Create trainer
     # - Run training
-    pass
+    raise NotImplementedError("Method not yet implemented")
 
 
 if __name__ == "__main__":

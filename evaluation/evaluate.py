@@ -83,7 +83,7 @@ class DetectionEvaluator:
         # - Collect predictions and ground truth
         # - Compute metrics
         # - Return results
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def compute_metrics(
         self,
@@ -104,7 +104,7 @@ class DetectionEvaluator:
         # - Compute TP/FP for each detection
         # - Compute precision and recall
         # - Compute AP and mAP
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def match_detections(
         self,
@@ -127,7 +127,7 @@ class DetectionEvaluator:
         # - Compute IoU between all pairs
         # - Greedy matching
         # - Mark as TP or FP
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
 
 class ZeroShotEvaluator(DetectionEvaluator):
@@ -173,7 +173,7 @@ class ZeroShotEvaluator(DetectionEvaluator):
         # - Forward pass without fine-tuning
         # - Evaluate on target classes
         # - Compute generalization metrics
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
 
 class BenchmarkEvaluator:
@@ -215,7 +215,7 @@ class BenchmarkEvaluator:
         # - Run few-shot evaluation
         # - Run speed benchmarks
         # - Aggregate results
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def benchmark_inference_speed(
         self,
@@ -236,7 +236,7 @@ class BenchmarkEvaluator:
         # - Warm up GPU
         # - Time forward passes
         # - Compute FPS and latency
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     def report_results(self, results: dict[str, Any]) -> None:
         """Print formatted evaluation report.
@@ -248,7 +248,7 @@ class BenchmarkEvaluator:
         # - Format results nicely
         # - Print tables
         # - Highlight key metrics
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -263,7 +263,7 @@ def create_parser() -> argparse.ArgumentParser:
     # - Evaluation mode (supervised, zero-shot, few-shot)
     # - Output directory
     # - Visualization options
-    pass
+    raise NotImplementedError("Method not yet implemented")
 
 
 def main(args: argparse.Namespace) -> None:
@@ -278,7 +278,7 @@ def main(args: argparse.Namespace) -> None:
     # - Create evaluator
     # - Run evaluation
     # - Report results
-    pass
+    raise NotImplementedError("Method not yet implemented")
 
 
 if __name__ == "__main__":

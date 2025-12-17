@@ -40,7 +40,7 @@ def coco_to_yolo(
     images = {img["id"]: img for img in coco_data["images"]}
 
     # Group annotations by image
-    image_annotations = {}
+    image_annotations = {}  # type: dict[str, Any]
     for ann in coco_data["annotations"]:
         img_id = ann["image_id"]
         if img_id not in image_annotations:
@@ -102,7 +102,7 @@ def analyze_dataset(coco_json_path: str) -> dict[str, Any]:
     num_categories = len(coco_data["categories"])
 
     # Category distribution
-    category_counts = {}
+    category_counts: dict[str, int] = {}
     bbox_sizes = []
 
     for ann in coco_data["annotations"]:
@@ -214,7 +214,7 @@ def create_yolo_data_yaml(
         categories: List of category names (in order)
         output_path: Output path for data.yaml
     """
-    import yaml
+    import yaml  # type: ignore[import-untyped]
 
     data = {
         "path": str(dataset_path),

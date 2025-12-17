@@ -48,6 +48,7 @@ class PatchMasking(nn.Module):
         # TODO: Implement masking initialization
         # - Store mask_ratio and strategy
         # - Pre-compute indexing for efficiency
+        raise NotImplementedError("PatchMasking.__init__ not yet implemented")
 
     def forward(
         self,
@@ -69,7 +70,7 @@ class PatchMasking(nn.Module):
         # - Generate random mask based on strategy
         # - Apply mask to input
         # - Return masked input and mask information
-        pass
+        raise NotImplementedError("PatchMasking.forward not yet implemented")
 
 
 class MAEEncoder(nn.Module):
@@ -122,7 +123,7 @@ class MAEEncoder(nn.Module):
         # - Compute patch embeddings
         # - Filter to visible patches only
         # - Apply transformer blocks
-        pass
+        raise NotImplementedError("MAEEncoder.forward not yet implemented")
 
 
 class MAEDecoder(nn.Module):
@@ -182,7 +183,7 @@ class MAEDecoder(nn.Module):
         # - Combine with encoder output
         # - Apply transformer blocks
         # - Project to pixel space
-        pass
+        raise NotImplementedError("MAEDecoder.forward not yet implemented")
 
 
 class MaskedAutoencoder(nn.Module):
@@ -240,7 +241,7 @@ class MaskedAutoencoder(nn.Module):
         # - Encode visible patches
         # - Decode all patches
         # - Return reconstruction and mask
-        pass
+        raise NotImplementedError("MaskedAutoencoder.forward not yet implemented")
 
     def compute_loss(
         self,
@@ -263,7 +264,7 @@ class MaskedAutoencoder(nn.Module):
         # TODO: Implement loss computation
         # - Compute MSE loss
         # - Weight by mask (only masked patches contribute)
-        pass
+        raise NotImplementedError("MaskedAutoencoder.compute_loss not yet implemented")
 
 
 def mae_vit_base(
@@ -282,7 +283,7 @@ def mae_vit_base(
     # TODO: Implement model creation
     # - Create MAE with ViT-Base configuration
     # - Load pretrained if specified
-    pass
+    raise NotImplementedError("mae_vit_base not yet implemented")
 
 
 def mae_vit_large(
@@ -301,4 +302,4 @@ def mae_vit_large(
     # TODO: Implement model creation
     # - Create MAE with ViT-Large configuration
     # - Load pretrained if specified
-    pass
+    raise NotImplementedError("mae_vit_large not yet implemented")

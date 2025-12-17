@@ -70,7 +70,8 @@ class IoUCalculator:
         # - Compute intersection areas
         # - Compute union areas
         # - Return IoU = intersection / union
-        pass
+        pass  # type: ignore
+        raise NotImplementedError("Method not yet implemented")
 
     def compute_intersection(
         self,
@@ -89,7 +90,8 @@ class IoUCalculator:
         # TODO: Implement intersection computation
         # - Compute overlap area
         # - Handle edge cases
-        pass
+        pass  # type: ignore
+        raise NotImplementedError("Method not yet implemented")
 
     def compute_union(
         self,
@@ -108,7 +110,8 @@ class IoUCalculator:
             Union areas of shape (N, M)
         """
         # TODO: Implement union computation
-        pass
+        pass  # type: ignore
+        raise NotImplementedError("Method not yet implemented")
 
 
 class PrecisionRecallCalculator:
@@ -153,7 +156,8 @@ class PrecisionRecallCalculator:
         # - Compute TP/FP at each threshold
         # - Compute precision and recall
         # - Interpolate PR curve
-        pass
+        pass  # type: ignore
+        raise NotImplementedError("Method not yet implemented")
 
     def compute_ap(
         self,
@@ -175,7 +179,8 @@ class PrecisionRecallCalculator:
         # - Interpolate PR curve
         # - Compute area under curve
         # - Return AP
-        pass
+        pass  # type: ignore
+        raise NotImplementedError("Method not yet implemented")
 
     def compute_f1_score(
         self,
@@ -192,7 +197,8 @@ class PrecisionRecallCalculator:
             F1 score
         """
         # TODO: Implement F1 score computation
-        pass
+        pass  # type: ignore
+        raise NotImplementedError("Method not yet implemented")
 
 
 class PerClassMetrics:
@@ -235,7 +241,8 @@ class PerClassMetrics:
             confidence: Prediction confidence
         """
         # TODO: Implement result accumulation
-        pass
+        pass  # type: ignore
+        raise NotImplementedError("Method not yet implemented")
 
     def compute_metrics(self) -> dict[int, dict[str, float]]:
         """Compute per-class metrics.
@@ -247,7 +254,8 @@ class PerClassMetrics:
         # - Compute AP for each class
         # - Compute precision/recall for each class
         # - Return organized results
-        pass
+        pass  # type: ignore
+        raise NotImplementedError("Method not yet implemented")
 
 
 class MeanAveragePrecision:
@@ -293,7 +301,8 @@ class MeanAveragePrecision:
         # - Evaluate at each IoU threshold
         # - Aggregate across classes
         # - Return results
-        pass
+        pass  # type: ignore
+        raise NotImplementedError("Method not yet implemented")
 
     def compute_map50_map95(
         self,
@@ -311,7 +320,8 @@ class MeanAveragePrecision:
             - mAP95: mAP at IoU=0.95
         """
         # TODO: Implement mAP50/95 computation
-        pass
+        pass  # type: ignore
+        raise NotImplementedError("Method not yet implemented")
 
 
 def compute_box_metrics(
@@ -332,7 +342,7 @@ def compute_box_metrics(
     # - Compute IoU
     # - Compute center distance
     # - Return metrics
-    pass
+    raise NotImplementedError("compute_box_metrics not yet implemented")
 
 
 def compute_class_confusion_matrix(
@@ -349,4 +359,4 @@ def compute_class_confusion_matrix(
         Confusion matrix (num_classes, num_classes)
     """
     # TODO: Implement confusion matrix computation
-    pass
+    raise NotImplementedError("compute_class_confusion_matrix not yet implemented")

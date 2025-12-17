@@ -41,7 +41,7 @@ class DatasetAugmenter:
         annotation_file = self.input_dir / "annotations" / f"{split}.json"
 
         if not annotation_file.exists():
-            return None
+            return None  # type: ignore[return-value]
 
         with open(annotation_file) as f:
             return json.load(f)
@@ -362,7 +362,7 @@ class DatasetAugmenter:
         self,
         split: str = "train",
         augmentation_config: dict | None = None,
-        max_augmentations_per_image: int = None,
+        max_augmentations_per_image: int | None = None,
     ) -> dict[str, int]:
         """
         Augment entire dataset.

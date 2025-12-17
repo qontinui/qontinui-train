@@ -11,7 +11,7 @@ Project: qontinui-train - Foundation model training for GUI understanding
 from pathlib import Path
 from typing import Any
 
-import yaml
+import yaml  # type: ignore[import-untyped]
 
 try:
     import wandb

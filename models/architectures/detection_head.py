@@ -55,7 +55,7 @@ class MLPHead(nn.Module):
             Output tensor of shape (..., output_dim)
         """
         # TODO: Implement forward pass through MLP layers
-        pass
+        raise NotImplementedError("MLPHead.forward not yet implemented")
 
 
 class TransformerDetectionHead(nn.Module):
@@ -109,7 +109,7 @@ class TransformerDetectionHead(nn.Module):
         # TODO: Implement forward pass
         # - Apply transformer decoder
         # - Project to class logits and boxes
-        pass
+        raise NotImplementedError("TransformerDetectionHead.forward not yet implemented")
 
 
 class RegionProposalHead(nn.Module):
@@ -150,7 +150,7 @@ class RegionProposalHead(nn.Module):
             - box_deltas: Shape (batch_size, num_anchors, 4)
         """
         # TODO: Implement forward pass
-        pass
+        raise NotImplementedError("RegionProposalHead.forward not yet implemented")
 
 
 class MultiScaleDetectionHead(nn.Module):
@@ -193,7 +193,7 @@ class MultiScaleDetectionHead(nn.Module):
             - Aggregated bounding box predictions
         """
         # TODO: Implement multi-scale forward pass
-        pass
+        raise NotImplementedError("MultiScaleDetectionHead.forward not yet implemented")
 
 
 class DetectionHeadLoss(nn.Module):
@@ -243,4 +243,4 @@ class DetectionHeadLoss(nn.Module):
             - loss_dict: Dictionary of individual loss components
         """
         # TODO: Implement loss computation
-        pass
+        raise NotImplementedError("DetectionHeadLoss.forward not yet implemented")

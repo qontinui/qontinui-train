@@ -9,19 +9,17 @@ Includes:
 """
 
 from qontinui_train.data_preparation.dataset_augmentation import (
-    augment_dataset,
-    create_augmentation_pipeline,
+    DatasetAugmenter,
 )
-from qontinui_train.data_preparation.dataset_generator import DatasetGenerator
+from qontinui_train.data_preparation.dataset_generator import ButtonDatasetGenerator
 from qontinui_train.data_preparation.dataset_labeler import DatasetLabeler
 from qontinui_train.data_preparation.dataset_manager import DatasetManager
-from qontinui_train.data_preparation.visualize_dataset import visualize_coco_dataset
+from qontinui_train.data_preparation.visualize_dataset import visualize_sample
 
 __all__ = [
-    "augment_dataset",
-    "create_augmentation_pipeline",
-    "DatasetGenerator",
+    "DatasetAugmenter",
+    "ButtonDatasetGenerator",
     "DatasetLabeler",
     "DatasetManager",
-    "visualize_coco_dataset",
+    "visualize_sample",
 ]

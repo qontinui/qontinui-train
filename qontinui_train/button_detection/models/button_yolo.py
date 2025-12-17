@@ -140,6 +140,8 @@ class ButtonYOLO:
             return self._train_yolov8(data_yaml, epochs, batch_size, img_size, **kwargs)
         elif self.model_type == "yolov5":
             return self._train_yolov5(data_yaml, epochs, batch_size, img_size, **kwargs)
+        else:
+            raise ValueError(f"Unknown model type: {self.model_type}")
 
     def _train_yolov8(
         self, data_yaml: str, epochs: int, batch_size: int, img_size: int, **kwargs
@@ -153,7 +155,7 @@ class ButtonYOLO:
             device=self.device,
             **kwargs,
         )
-        return results
+        return results  # type: ignore[no-any-return,return-value]
 
     def _train_yolov5(
         self, data_yaml: str, epochs: int, batch_size: int, img_size: int, **kwargs
@@ -172,7 +174,7 @@ class ButtonYOLO:
         conf_threshold: float = 0.25,
         iou_threshold: float = 0.45,
         max_det: int = 100,
-    ) -> list[dict[str, Any]]:
+    ) -> list[list[dict[str, Any]]]:
         """
         Run inference on images
 
@@ -183,16 +185,18 @@ class ButtonYOLO:
             max_det: Maximum detections per image
 
         Returns:
-            List of detection dictionaries per image
+            List of lists of detection dictionaries (one list per image)
         """
         if self.model_type == "yolov8":
             return self._predict_yolov8(images, conf_threshold, iou_threshold, max_det)
         elif self.model_type == "yolov5":
             return self._predict_yolov5(images, conf_threshold, iou_threshold, max_det)
+        else:
+            raise ValueError(f"Unknown model type: {self.model_type}")
 
     def _predict_yolov8(
         self, images: Any, conf: float, iou: float, max_det: int
-    ) -> list[dict[str, Any]]:
+    ) -> list[list[dict[str, Any]]]:
         """Run YOLOv8 inference"""
         results = self.model.predict(
             images,
@@ -237,7 +241,7 @@ class ButtonYOLO:
 
     def _predict_yolov5(
         self, images: Any, conf: float, iou: float, max_det: int
-    ) -> list[dict[str, Any]]:
+    ) -> list[list[dict[str, Any]]]:
         """Run YOLOv5 inference"""
         self.model.conf = conf
         self.model.iou = iou

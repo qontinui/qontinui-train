@@ -9,7 +9,9 @@ import json
 import random
 import shutil
 import xml.etree.ElementTree as ET
+from typing import Any
 from collections import defaultdict
+from collections.abc import Collection
 from datetime import datetime
 from pathlib import Path
 
@@ -36,7 +38,7 @@ class DatasetManager:
             return None
 
         with open(annotation_file) as f:
-            return json.load(f)
+            return json.load(f)  # type: ignore[no-any-return]
 
     def save_coco_dataset(self, dataset: dict, split: str):
         """Save COCO format dataset."""
@@ -46,7 +48,7 @@ class DatasetManager:
         with open(annotation_file, "w") as f:
             json.dump(dataset, f, indent=2)
 
-    def calculate_statistics(self, split: str = None) -> dict:
+    def calculate_statistics(self, split: str | None = None) -> dict:
         """
         Calculate comprehensive dataset statistics.
 
@@ -72,7 +74,7 @@ class DatasetManager:
             }
 
             # Annotations per image
-            anns_per_image = defaultdict(int)
+            anns_per_image: dict[int, int] = defaultdict(int)
             for ann in dataset["annotations"]:
                 anns_per_image[ann["image_id"]] += 1
 
@@ -149,7 +151,7 @@ class DatasetManager:
 
             # Attribute statistics (if available)
             if dataset["annotations"] and "attributes" in dataset["annotations"][0]:
-                attributes = defaultdict(lambda: defaultdict(int))
+                attributes: dict[str, Any] = defaultdict(lambda: defaultdict(int))  # type: ignore[assignment]
 
                 for ann in dataset["annotations"]:
                     if "attributes" in ann:
@@ -162,7 +164,7 @@ class DatasetManager:
 
         return all_stats
 
-    def verify_dataset(self, split: str = None) -> dict:
+    def verify_dataset(self, split: str | None = None) -> dict:
         """
         Verify dataset integrity and quality.
 
@@ -229,7 +231,7 @@ class DatasetManager:
                 )
 
             # Check for duplicate image IDs
-            image_id_counts = defaultdict(int)
+            image_id_counts: dict[int, int] = defaultdict(int)
             for img in dataset["images"]:
                 image_id_counts[img["id"]] += 1
 
@@ -365,7 +367,7 @@ class DatasetManager:
             "annotations": annotations,
         }
 
-    def convert_to_yolo(self, output_dir: str, split: str = None):
+    def convert_to_yolo(self, output_dir: str, split: str | None = None):
         """
         Convert COCO dataset to YOLO format.
 
@@ -438,7 +440,7 @@ names: ['button']  # class names
 
         print(f"Converted to YOLO format: {output_path}")
 
-    def convert_to_pascal_voc(self, output_dir: str, split: str = None):
+    def convert_to_pascal_voc(self, output_dir: str, split: str | None = None):
         """
         Convert COCO dataset to Pascal VOC format.
 
