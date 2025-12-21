@@ -11,7 +11,6 @@ The transition predictor is designed to:
 4. Identify transition triggers (actions that cause state changes)
 """
 
-
 import torch
 import torch.nn as nn
 

@@ -16,7 +16,6 @@ References:
     - Vision Transformer implementations: https://github.com/huggingface/pytorch-image-models
 """
 
-
 import torch
 import torch.nn as nn
 

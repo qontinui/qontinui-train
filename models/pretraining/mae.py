@@ -18,7 +18,6 @@ References:
     - Official Implementation: https://github.com/facebookresearch/mae
 """
 
-
 import torch
 import torch.nn as nn
 

@@ -7,8 +7,8 @@ Includes rotation, scaling, color jitter, noise, blur, and resolution simulation
 
 import json
 import random
-from typing import Any
 from pathlib import Path
+from typing import Any
 
 import cv2
 import numpy as np
@@ -42,10 +42,11 @@ class DatasetAugmenter:
         annotation_file = self.input_dir / "annotations" / f"{split}.json"
 
         if not annotation_file.exists():
-            return None  
+            return None
 
         with open(annotation_file) as f:
-            dataset: dict[str, Any] = json.load(f); return dataset
+            dataset: dict[str, Any] = json.load(f)
+            return dataset
 
     def save_dataset(self, dataset: dict, split: str):
         """Save COCO format dataset."""

@@ -11,7 +11,6 @@ The RPN is designed to:
 3. Filter and rank proposals based on state-relevance scores
 """
 
-
 import torch
 import torch.nn as nn
 

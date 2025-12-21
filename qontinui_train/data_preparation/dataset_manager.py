@@ -9,11 +9,10 @@ import json
 import random
 import shutil
 import xml.etree.ElementTree as ET
-from typing import Any
 from collections import defaultdict
-from collections.abc import Collection
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 
 class DatasetManager:

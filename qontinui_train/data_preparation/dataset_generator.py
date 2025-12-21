@@ -300,7 +300,8 @@ class ButtonDatasetGenerator:
         text_color = (255, 255, 255) if brightness < 128 else (0, 0, 0)
 
         if state == "disabled":
-            r, g, b = text_color; text_color = (int(r * 0.5), int(g * 0.5), int(b * 0.5))
+            r, g, b = text_color
+            text_color = (int(r * 0.5), int(g * 0.5), int(b * 0.5))
 
         if style != "outlined":
             draw.text((text_x, text_y), label, fill=text_color, font=font)
@@ -376,7 +377,9 @@ class ButtonDatasetGenerator:
 
         return img
 
-    def generate_sample(self, split: str = "train", num_buttons: int | None = None) -> dict:
+    def generate_sample(
+        self, split: str = "train", num_buttons: int | None = None
+    ) -> dict:
         """
         Generate a single screenshot sample with buttons.
 
@@ -430,7 +433,10 @@ class ButtonDatasetGenerator:
                 overlap = False
                 for btn in placed_buttons:
                     if not (
-                        x + width < btn["x"] or x > btn["x"] + btn["w"] or y + height < btn["y"] or y > btn["y"] + btn["h"]
+                        x + width < btn["x"]
+                        or x > btn["x"] + btn["w"]
+                        or y + height < btn["y"]
+                        or y > btn["y"] + btn["h"]
                     ):
                         overlap = True
                         break

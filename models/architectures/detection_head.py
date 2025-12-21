@@ -11,7 +11,6 @@ The detection head predicts:
     - Optional: Confidence scores, instance masks, etc.
 """
 
-
 import torch
 import torch.nn as nn
 
@@ -109,7 +108,9 @@ class TransformerDetectionHead(nn.Module):
         # TODO: Implement forward pass
         # - Apply transformer decoder
         # - Project to class logits and boxes
-        raise NotImplementedError("TransformerDetectionHead.forward not yet implemented")
+        raise NotImplementedError(
+            "TransformerDetectionHead.forward not yet implemented"
+        )
 
 
 class RegionProposalHead(nn.Module):

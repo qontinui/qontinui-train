@@ -76,7 +76,8 @@ class ExperimentTracker:
         with open(config_path) as f:
             config: dict[str, Any] = yaml.safe_load(f)
 
-        result: dict[str, Any] = config.get("wandb", {}); return result
+        result: dict[str, Any] = config.get("wandb", {})
+        return result
 
     def _init_wandb(self):
         """Initialize Weights & Biases."""
