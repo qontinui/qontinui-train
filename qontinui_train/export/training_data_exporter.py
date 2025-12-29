@@ -21,13 +21,13 @@ import logging
 import shutil
 from collections.abc import Callable
 from dataclasses import dataclass
-from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 from models.action_execution_record import ActionExecutionRecord
 from PIL import Image
+from qontinui_schemas.common import utc_now
 
 # Import click analysis from qontinui library
 try:
@@ -172,7 +172,7 @@ class TrainingDataExporter:
         Returns:
             ExportStatistics object with export results.
         """
-        start_time = datetime.now()
+        start_time = utc_now()
         stats = ExportStatistics()
         stats.total_records = len(records)
 
@@ -193,7 +193,7 @@ class TrainingDataExporter:
         # Update metadata
         self._update_metadata(stats)
 
-        stats.export_time_seconds = (datetime.now() - start_time).total_seconds()
+        stats.export_time_seconds = (utc_now() - start_time).total_seconds()
         return stats
 
     def _export_single_record(
@@ -582,7 +582,7 @@ class TrainingDataExporter:
         """
         metadata = {
             "dataset_version": self.dataset_version,
-            "created": datetime.now().isoformat(),
+            "created": utc_now().isoformat(),
             "total_images": stats.unique_images,
             "total_annotations": stats.total_annotations,
             "category_map": self.category_id_map,
@@ -620,7 +620,7 @@ class TrainingDataExporter:
             "info": {
                 "version": self.dataset_version,
                 "description": "GUI automation training dataset",
-                "date_created": datetime.now().isoformat(),
+                "date_created": utc_now().isoformat(),
             },
             "images": [],
             "annotations": [],

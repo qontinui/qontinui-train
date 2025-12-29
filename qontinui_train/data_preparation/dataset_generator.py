@@ -8,11 +8,11 @@ Creates diverse button examples with various styles, sizes, colors, and states.
 import colorsys
 import json
 import random
-from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 from PIL import Image, ImageDraw, ImageFont
+from qontinui_schemas.common import utc_now
 
 
 class ButtonDatasetGenerator:
@@ -133,7 +133,7 @@ class ButtonDatasetGenerator:
                 "version": "1.0",
                 "year": 2025,
                 "contributor": "QontinUI",
-                "date_created": datetime.now().isoformat(),
+                "date_created": utc_now().isoformat(),
             },
             "licenses": [],
             "images": [],
@@ -487,7 +487,7 @@ class ButtonDatasetGenerator:
             "file_name": filename,
             "width": img_width,
             "height": img_height,
-            "date_captured": datetime.now().isoformat(),
+            "date_captured": utc_now().isoformat(),
             "context": context,
         }
 
@@ -575,7 +575,7 @@ class ButtonDatasetGenerator:
 
         # Save metadata
         metadata = {
-            "created": datetime.now().isoformat(),
+            "created": utc_now().isoformat(),
             "total_samples": num_samples,
             "total_buttons": sum(s["buttons"] for s in stats.values()),
             "splits": stats,

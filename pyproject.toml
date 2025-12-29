@@ -16,6 +16,7 @@ pillow = ">=10.0.0,<13.0.0"
 tensorboard = "^2.14.0"
 pyyaml = "^6.0"
 qontinui = {path = "../qontinui", develop = true}
+qontinui-schemas = {path = "../qontinui-schemas", develop = true}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3"

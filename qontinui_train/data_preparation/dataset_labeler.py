@@ -6,12 +6,12 @@ Allows for validation and correction of automated predictions.
 """
 
 import json
-from datetime import datetime
 from pathlib import Path
 
 import cv2
 import numpy as np
 from PIL import Image
+from qontinui_schemas.common import utc_now
 
 
 class DatasetLabeler:
@@ -51,7 +51,7 @@ class DatasetLabeler:
                 "version": "1.0",
                 "year": 2025,
                 "contributor": "QontinUI",
-                "date_created": datetime.now().isoformat(),
+                "date_created": utc_now().isoformat(),
             },
             "licenses": [],
             "images": [],
@@ -311,7 +311,7 @@ class DatasetLabeler:
             "file_name": filename,
             "width": img_width,
             "height": img_height,
-            "date_captured": datetime.now().isoformat(),
+            "date_captured": utc_now().isoformat(),
             "source_path": str(image_path),
         }
 

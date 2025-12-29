@@ -10,9 +10,10 @@ import random
 import shutil
 import xml.etree.ElementTree as ET
 from collections import defaultdict
-from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+from qontinui_schemas.common import utc_now
 
 
 class DatasetManager:
@@ -527,7 +528,7 @@ names: ['button']  # class names
                 "version": "1.0",
                 "year": 2025,
                 "contributor": "QontinUI",
-                "date_created": datetime.now().isoformat(),
+                "date_created": utc_now().isoformat(),
             },
             "licenses": [],
             "images": [],
