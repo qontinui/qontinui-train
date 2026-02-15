@@ -165,7 +165,9 @@ class ButtonCNN(nn.Module):
             nn.Sigmoid(),
         )
 
-    def _build_efficientnet_architecture(self, pretrained: bool, dropout: float) -> None:
+    def _build_efficientnet_architecture(
+        self, pretrained: bool, dropout: float
+    ) -> None:
         """Build EfficientNet-based architecture"""
         # Load pretrained EfficientNet-B0
         if pretrained:

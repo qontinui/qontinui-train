@@ -153,7 +153,9 @@ class TransitionPredictor(nn.Module):
             ) / 2
 
             next_state_idx = int(torch.argmax(combined_scores, dim=1).item())
-            confidence_val = float(torch.softmax(combined_scores, dim=1)[0, next_state_idx].item())
+            confidence_val = float(
+                torch.softmax(combined_scores, dim=1)[0, next_state_idx].item()
+            )
 
         return next_state_idx, confidence_val
 

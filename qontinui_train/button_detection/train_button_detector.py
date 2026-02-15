@@ -153,7 +153,9 @@ class COCOButtonDataset(Dataset[tuple[torch.Tensor, dict[str, Any]]]):
         if self.transform:
             image_tensor: torch.Tensor = self.transform(pil_image)
         else:
-            image_tensor = torch.from_numpy(np.array(pil_image)).permute(2, 0, 1).float() / 255.0
+            image_tensor = (
+                torch.from_numpy(np.array(pil_image)).permute(2, 0, 1).float() / 255.0
+            )
 
         # Create target
         target = {
@@ -179,7 +181,9 @@ class COCOButtonDataset(Dataset[tuple[torch.Tensor, dict[str, Any]]]):
         if self.transform:
             image_tensor: torch.Tensor = self.transform(pil_image)
         else:
-            image_tensor = torch.from_numpy(np.array(pil_image)).permute(2, 0, 1).float() / 255.0
+            image_tensor = (
+                torch.from_numpy(np.array(pil_image)).permute(2, 0, 1).float() / 255.0
+            )
 
         # Format targets for detection
         boxes = []

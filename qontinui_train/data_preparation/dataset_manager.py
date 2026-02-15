@@ -350,7 +350,9 @@ class DatasetManager:
 
         return stats
 
-    def _create_split_dataset(self, source_dataset: dict[str, Any], images: list[dict[str, Any]]) -> dict[str, Any]:
+    def _create_split_dataset(
+        self, source_dataset: dict[str, Any], images: list[dict[str, Any]]
+    ) -> dict[str, Any]:
         """Create a dataset for a specific split."""
         image_ids = {img["id"] for img in images}
 
@@ -514,7 +516,9 @@ names: ['button']  # class names
 
         print(f"Converted to Pascal VOC format: {output_path}")
 
-    def merge_datasets(self, dataset_paths: list[str], output_split: str = "train") -> None:
+    def merge_datasets(
+        self, dataset_paths: list[str], output_split: str = "train"
+    ) -> None:
         """
         Merge multiple datasets into one.
 

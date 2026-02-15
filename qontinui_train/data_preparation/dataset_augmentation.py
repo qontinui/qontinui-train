@@ -293,7 +293,10 @@ class DatasetAugmenter:
         return flipped, new_annotations
 
     def augment_image(
-        self, image_path: str, annotations: list[dict[str, Any]], augmentation_config: dict[str, Any]
+        self,
+        image_path: str,
+        annotations: list[dict[str, Any]],
+        augmentation_config: dict[str, Any],
     ) -> list[tuple[Image.Image, list[dict[str, Any]], str]]:
         """
         Apply augmentation pipeline to a single image.

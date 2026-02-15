@@ -11,7 +11,9 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 
-def visualize_sample(dataset_dir: str, split: str = "train", num_samples: int = 5) -> None:
+def visualize_sample(
+    dataset_dir: str, split: str = "train", num_samples: int = 5
+) -> None:
     """
     Visualize sample images with annotations.
 
