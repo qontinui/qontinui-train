@@ -36,8 +36,9 @@ class ConvBlock(nn.Module):
         self.bn = nn.BatchNorm2d(out_channels)
         self.relu = nn.ReLU(inplace=True)
 
-    def forward(self, x):
-        return self.relu(self.bn(self.conv(x)))
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        result: torch.Tensor = self.relu(self.bn(self.conv(x)))
+        return result
 
 
 class ButtonCNN(nn.Module):
@@ -86,7 +87,7 @@ class ButtonCNN(nn.Module):
         else:
             raise ValueError(f"Unknown architecture: {architecture}")
 
-    def _build_custom_architecture(self, dropout: float):
+    def _build_custom_architecture(self, dropout: float) -> None:
         """Build lightweight custom CNN architecture"""
         # Feature extractor - 4 conv blocks
         self.features = nn.Sequential(
@@ -124,7 +125,7 @@ class ButtonCNN(nn.Module):
             nn.Sigmoid(),  # Confidence between 0 and 1
         )
 
-    def _build_mobilenet_architecture(self, pretrained: bool, dropout: float):
+    def _build_mobilenet_architecture(self, pretrained: bool, dropout: float) -> None:
         """Build MobileNetV3-based architecture"""
         # Load pretrained MobileNetV3-Small
         if pretrained:
@@ -164,7 +165,7 @@ class ButtonCNN(nn.Module):
             nn.Sigmoid(),
         )
 
-    def _build_efficientnet_architecture(self, pretrained: bool, dropout: float):
+    def _build_efficientnet_architecture(self, pretrained: bool, dropout: float) -> None:
         """Build EfficientNet-based architecture"""
         # Load pretrained EfficientNet-B0
         if pretrained:
@@ -278,12 +279,12 @@ class ButtonCNN(nn.Module):
         """Count trainable parameters"""
         return sum(p.numel() for p in self.parameters() if p.requires_grad)
 
-    def freeze_backbone(self):
+    def freeze_backbone(self) -> None:
         """Freeze feature extractor for transfer learning"""
         for param in self.features.parameters():
             param.requires_grad = False
 
-    def unfreeze_backbone(self):
+    def unfreeze_backbone(self) -> None:
         """Unfreeze feature extractor"""
         for param in self.features.parameters():
             param.requires_grad = True

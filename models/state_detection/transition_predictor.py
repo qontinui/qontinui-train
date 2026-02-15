@@ -152,10 +152,10 @@ class TransitionPredictor(nn.Module):
                 predictions + transition_probs[current_state].unsqueeze(0)
             ) / 2
 
-            next_state = torch.argmax(combined_scores, dim=1).item()
-            confidence = torch.softmax(combined_scores, dim=1)[0, next_state].item()
+            next_state_idx = int(torch.argmax(combined_scores, dim=1).item())
+            confidence_val = float(torch.softmax(combined_scores, dim=1)[0, next_state_idx].item())
 
-        return next_state, confidence
+        return next_state_idx, confidence_val
 
     def compute_loss(
         self,

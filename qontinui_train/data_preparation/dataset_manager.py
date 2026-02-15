@@ -30,7 +30,7 @@ class DatasetManager:
         self.images_dir = self.dataset_dir / "images"
         self.annotations_dir = self.dataset_dir / "annotations"
 
-    def load_coco_dataset(self, split: str) -> dict | None:
+    def load_coco_dataset(self, split: str) -> dict[str, Any] | None:
         """Load COCO format dataset."""
         annotation_file = self.annotations_dir / f"{split}.json"
 
@@ -40,7 +40,7 @@ class DatasetManager:
         with open(annotation_file) as f:
             return json.load(f)  # type: ignore[no-any-return]
 
-    def save_coco_dataset(self, dataset: dict, split: str):
+    def save_coco_dataset(self, dataset: dict[str, Any], split: str) -> None:
         """Save COCO format dataset."""
         self.annotations_dir.mkdir(parents=True, exist_ok=True)
         annotation_file = self.annotations_dir / f"{split}.json"
@@ -48,7 +48,7 @@ class DatasetManager:
         with open(annotation_file, "w") as f:
             json.dump(dataset, f, indent=2)
 
-    def calculate_statistics(self, split: str | None = None) -> dict:
+    def calculate_statistics(self, split: str | None = None) -> dict[str, Any]:
         """
         Calculate comprehensive dataset statistics.
 
@@ -151,7 +151,7 @@ class DatasetManager:
 
             # Attribute statistics (if available)
             if dataset["annotations"] and "attributes" in dataset["annotations"][0]:
-                attributes: dict[str, Any] = defaultdict(lambda: defaultdict(int))  # type: ignore[assignment]
+                attributes: dict[str, Any] = defaultdict(lambda: defaultdict(int))
 
                 for ann in dataset["annotations"]:
                     if "attributes" in ann:
@@ -350,7 +350,7 @@ class DatasetManager:
 
         return stats
 
-    def _create_split_dataset(self, source_dataset: dict, images: list[dict]) -> dict:
+    def _create_split_dataset(self, source_dataset: dict[str, Any], images: list[dict[str, Any]]) -> dict[str, Any]:
         """Create a dataset for a specific split."""
         image_ids = {img["id"] for img in images}
 
@@ -367,7 +367,7 @@ class DatasetManager:
             "annotations": annotations,
         }
 
-    def convert_to_yolo(self, output_dir: str, split: str | None = None):
+    def convert_to_yolo(self, output_dir: str, split: str | None = None) -> None:
         """
         Convert COCO dataset to YOLO format.
 
@@ -440,7 +440,7 @@ names: ['button']  # class names
 
         print(f"Converted to YOLO format: {output_path}")
 
-    def convert_to_pascal_voc(self, output_dir: str, split: str | None = None):
+    def convert_to_pascal_voc(self, output_dir: str, split: str | None = None) -> None:
         """
         Convert COCO dataset to Pascal VOC format.
 
@@ -514,7 +514,7 @@ names: ['button']  # class names
 
         print(f"Converted to Pascal VOC format: {output_path}")
 
-    def merge_datasets(self, dataset_paths: list[str], output_split: str = "train"):
+    def merge_datasets(self, dataset_paths: list[str], output_split: str = "train") -> None:
         """
         Merge multiple datasets into one.
 
@@ -577,7 +577,7 @@ names: ['button']  # class names
         print(f"Total annotations: {len(merged_dataset['annotations'])}")
 
 
-def main():
+def main() -> None:
     """CLI interface for dataset management."""
     import argparse
 

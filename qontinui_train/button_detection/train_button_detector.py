@@ -36,7 +36,7 @@ from qontinui_train.button_detection.models.button_yolo import (
 )
 
 
-class COCOButtonDataset(Dataset):
+class COCOButtonDataset(Dataset[tuple[torch.Tensor, dict[str, Any]]]):
     """
     Dataset loader for COCO format button annotations
 
@@ -65,10 +65,10 @@ class COCOButtonDataset(Dataset):
         self,
         root_dir: str,
         annotation_file: str,
-        transform=None,
+        transform: Any = None,
         mode: str = "classification",
         img_size: int = 224,
-    ):
+    ) -> None:
         """
         Initialize COCO dataset
 
@@ -106,7 +106,7 @@ class COCOButtonDataset(Dataset):
         else:
             self.image_ids = list(self.images.keys())
 
-    def _create_classification_samples(self):
+    def _create_classification_samples(self) -> list[dict[str, Any]]:
         """Create classification samples from bounding boxes"""
         samples = []
         for img_id, annotations in self.image_annotations.items():
@@ -123,37 +123,37 @@ class COCOButtonDataset(Dataset):
                 )
         return samples
 
-    def __len__(self):
+    def __len__(self) -> int:
         if self.mode == "classification":
             return len(self.samples)
         else:
             return len(self.image_ids)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int) -> tuple[torch.Tensor, dict[str, Any]]:
         if self.mode == "classification":
             return self._get_classification_item(idx)
         else:
             return self._get_detection_item(idx)
 
-    def _get_classification_item(self, idx) -> tuple[torch.Tensor, dict[str, Any]]:
+    def _get_classification_item(self, idx: int) -> tuple[torch.Tensor, dict[str, Any]]:
         """Get classification sample"""
         sample = self.samples[idx]
 
         # Load image
-        image = Image.open(sample["image_path"]).convert("RGB")
+        pil_image = Image.open(sample["image_path"]).convert("RGB")
 
         # Crop to bounding box
         x, y, w, h = sample["bbox"]
-        image = image.crop((x, y, x + w, y + h))
+        pil_image = pil_image.crop((x, y, x + w, y + h))
 
         # Resize
-        image = image.resize((self.img_size, self.img_size))
+        pil_image = pil_image.resize((self.img_size, self.img_size))
 
         # Apply transforms
         if self.transform:
-            image = self.transform(image)
+            image_tensor: torch.Tensor = self.transform(pil_image)
         else:
-            image = torch.from_numpy(np.array(image)).permute(2, 0, 1).float() / 255.0
+            image_tensor = torch.from_numpy(np.array(pil_image)).permute(2, 0, 1).float() / 255.0
 
         # Create target
         target = {
@@ -161,25 +161,25 @@ class COCOButtonDataset(Dataset):
             "button_type": torch.tensor(sample["category_id"], dtype=torch.long),
         }
 
-        return image, target
+        return image_tensor, target
 
-    def _get_detection_item(self, idx) -> tuple[torch.Tensor, dict[str, Any]]:
+    def _get_detection_item(self, idx: int) -> tuple[torch.Tensor, dict[str, Any]]:
         """Get detection sample (for YOLO)"""
         img_id = self.image_ids[idx]
         img_info = self.images[img_id]
 
         # Load image
         image_path = self.root_dir / img_info["file_name"]
-        image = Image.open(image_path).convert("RGB")
+        pil_image = Image.open(image_path).convert("RGB")
 
         # Get annotations
         annotations = self.image_annotations.get(img_id, [])
 
         # Convert to tensor
         if self.transform:
-            image = self.transform(image)
+            image_tensor: torch.Tensor = self.transform(pil_image)
         else:
-            image = torch.from_numpy(np.array(image)).permute(2, 0, 1).float() / 255.0
+            image_tensor = torch.from_numpy(np.array(pil_image)).permute(2, 0, 1).float() / 255.0
 
         # Format targets for detection
         boxes = []
@@ -202,7 +202,7 @@ class COCOButtonDataset(Dataset):
             "image_id": torch.tensor([img_id]),
         }
 
-        return image, target
+        return image_tensor, target
 
 
 class ButtonDetectorTrainer:
@@ -239,7 +239,7 @@ class ButtonDetectorTrainer:
         self.criterion_confidence = nn.BCELoss()
 
         # Setup logging
-        self.writer = SummaryWriter(config.get("log_dir", "runs/button_detector"))
+        self.writer: Any = SummaryWriter(config.get("log_dir", "runs/button_detector"))  # type: ignore[no-untyped-call]
         self.checkpoint_dir = Path(config.get("checkpoint_dir", "checkpoints"))
         self.checkpoint_dir.mkdir(exist_ok=True, parents=True)
 
@@ -248,7 +248,7 @@ class ButtonDetectorTrainer:
         self.best_val_loss = float("inf")
         self.global_step = 0
 
-    def _create_model(self):
+    def _create_model(self) -> ButtonCNN | ButtonYOLO:
         """Create model based on configuration"""
         model_type = self.config.get("model", "mobilenet_v3")
 
@@ -286,7 +286,7 @@ class ButtonDetectorTrainer:
         else:
             raise ValueError(f"Unknown model type: {model_type}")
 
-    def _create_dataloaders(self) -> tuple[DataLoader, DataLoader]:
+    def _create_dataloaders(self) -> tuple[DataLoader[Any], DataLoader[Any]]:
         """Create training and validation dataloaders"""
         # Determine mode based on model type
         model_type = self.config.get("model", "mobilenet_v3")
@@ -328,7 +328,7 @@ class ButtonDetectorTrainer:
 
         return train_loader, val_loader
 
-    def _create_optimizer(self) -> optim.Optimizer:
+    def _create_optimizer(self) -> optim.Optimizer | None:
         """Create optimizer"""
         optimizer_name = self.config.get("optimizer", "adam").lower()
         lr = self.config.get("lr", 0.001)
@@ -352,9 +352,9 @@ class ButtonDetectorTrainer:
         else:
             raise ValueError(f"Unknown optimizer: {optimizer_name}")
 
-    def _create_scheduler(self):
+    def _create_scheduler(self) -> Any:
         """Create learning rate scheduler"""
-        if not isinstance(self.model, ButtonCNN):
+        if not isinstance(self.model, ButtonCNN) or self.optimizer is None:
             return None
 
         scheduler_name = self.config.get("scheduler", "cosine")
@@ -380,7 +380,8 @@ class ButtonDetectorTrainer:
             return None
 
     def train_epoch(self, epoch: int) -> dict[str, float]:
-        """Train for one epoch"""
+        """Train for one epoch (CNN models only)"""
+        assert isinstance(self.model, ButtonCNN) and self.optimizer is not None
         self.model.train()
 
         total_loss = 0.0
@@ -448,7 +449,8 @@ class ButtonDetectorTrainer:
 
     @torch.no_grad()
     def validate(self, epoch: int) -> dict[str, float]:
-        """Validate model"""
+        """Validate model (CNN models only)"""
+        assert isinstance(self.model, ButtonCNN)
         self.model.eval()
 
         total_loss = 0.0
@@ -502,8 +504,9 @@ class ButtonDetectorTrainer:
             "button_type_accuracy": 100.0 * correct_button_type / total_samples,
         }
 
-    def save_checkpoint(self, epoch: int, is_best: bool = False):
+    def save_checkpoint(self, epoch: int, is_best: bool = False) -> None:
         """Save model checkpoint"""
+        assert isinstance(self.model, ButtonCNN) and self.optimizer is not None
         checkpoint = {
             "epoch": epoch,
             "model_state_dict": self.model.state_dict(),
@@ -527,7 +530,7 @@ class ButtonDetectorTrainer:
             epoch_path = self.checkpoint_dir / f"epoch_{epoch}.pt"
             torch.save(checkpoint, epoch_path)
 
-    def train(self):
+    def train(self) -> None:
         """Main training loop"""
         print(f"\nStarting training for {self.config.get('epochs', 50)} epochs...")
         print(f"Model: {self.config.get('model', 'mobilenet_v3')}")
@@ -598,7 +601,7 @@ def load_config(config_path: str) -> dict[str, Any]:
     return config
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Train Button Detector")
     parser.add_argument("--config", type=str, help="Path to config YAML file")
     parser.add_argument(

@@ -8,6 +8,7 @@ qontinui-train. It integrates with UnifiedDataCollector to capture execution dat
 import logging
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 from exporters.training_data_exporter import ExportStatistics, TrainingDataExporter
 from models.action_execution_record import ActionExecutionRecord
@@ -205,7 +206,7 @@ class TrainingExportService:
             logger.error(f"Failed to export COCO format: {e}", exc_info=True)
             return False
 
-    def get_summary(self) -> dict:
+    def get_summary(self) -> dict[str, Any]:
         """Get a summary of the export service state.
 
         Returns:

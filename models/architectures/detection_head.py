@@ -130,8 +130,8 @@ class RegionProposalHead(nn.Module):
         self,
         embed_dim: int = 768,
         num_classes: int = 10,
-        anchor_scales: list | None = None,
-        anchor_ratios: list | None = None,
+        anchor_scales: list[float] | None = None,
+        anchor_ratios: list[float] | None = None,
     ) -> None:
         """Initialize region proposal head."""
         super().__init__()
@@ -169,7 +169,7 @@ class MultiScaleDetectionHead(nn.Module):
 
     def __init__(
         self,
-        embed_dims: list,
+        embed_dims: list[int],
         num_queries_per_scale: int = 50,
         num_classes: int = 10,
         use_transformer: bool = True,

@@ -61,7 +61,7 @@ class ButtonYOLO:
         # Load model
         self.model = self._load_model(pretrained)
 
-    def _load_model(self, pretrained: bool):
+    def _load_model(self, pretrained: bool) -> Any:
         """Load YOLO model"""
         if self.model_type == "yolov8":
             return self._load_yolov8(pretrained)
@@ -70,10 +70,10 @@ class ButtonYOLO:
         else:
             raise ValueError(f"Unknown model type: {self.model_type}")
 
-    def _load_yolov8(self, pretrained: bool):
+    def _load_yolov8(self, pretrained: bool) -> Any:
         """Load YOLOv8 model"""
         try:
-            from ultralytics import YOLO
+            from ultralytics import YOLO  # type: ignore[attr-defined]
 
             if pretrained:
                 # Load pretrained model
@@ -94,15 +94,15 @@ class ButtonYOLO:
                 "Install with: pip install ultralytics"
             ) from err
 
-    def _load_yolov5(self, pretrained: bool):
+    def _load_yolov5(self, pretrained: bool) -> Any:
         """Load YOLOv5 model from torch hub"""
         try:
             if pretrained:
-                model = torch.hub.load(
+                model: Any = torch.hub.load(  # type: ignore[no-untyped-call]
                     "ultralytics/yolov5", f"yolov5{self.model_size}", pretrained=True
                 )
             else:
-                model = torch.hub.load(
+                model = torch.hub.load(  # type: ignore[no-untyped-call]
                     "ultralytics/yolov5", f"yolov5{self.model_size}", pretrained=False
                 )
 
@@ -121,7 +121,7 @@ class ButtonYOLO:
         epochs: int = 50,
         batch_size: int = 16,
         img_size: int = 640,
-        **kwargs,
+        **kwargs: Any,
     ) -> dict[str, Any]:
         """
         Train the YOLO model
@@ -144,7 +144,7 @@ class ButtonYOLO:
             raise ValueError(f"Unknown model type: {self.model_type}")
 
     def _train_yolov8(
-        self, data_yaml: str, epochs: int, batch_size: int, img_size: int, **kwargs
+        self, data_yaml: str, epochs: int, batch_size: int, img_size: int, **kwargs: Any
     ) -> dict[str, Any]:
         """Train YOLOv8 model"""
         results = self.model.train(
@@ -155,10 +155,10 @@ class ButtonYOLO:
             device=self.device,
             **kwargs,
         )
-        return results  # type: ignore[no-any-return,return-value]
+        return results  # type: ignore[no-any-return]
 
     def _train_yolov5(
-        self, data_yaml: str, epochs: int, batch_size: int, img_size: int, **kwargs
+        self, data_yaml: str, epochs: int, batch_size: int, img_size: int, **kwargs: Any
     ) -> dict[str, Any]:
         """Train YOLOv5 model - requires custom training loop"""
         # Note: YOLOv5 training typically done via train.py script
@@ -314,7 +314,7 @@ class ButtonYOLO:
             # Export to ONNX
             torch.onnx.export(
                 self.model,
-                dummy_input,
+                (dummy_input,),
                 output_path,
                 opset_version=12,
                 input_names=["images"],
@@ -336,17 +336,17 @@ class ButtonYOLO:
                 "Install with: pip install onnx onnx-simplifier"
             ) from err
 
-    def save(self, path: str):
+    def save(self, path: str) -> None:
         """Save model weights"""
         if self.model_type == "yolov8":
             self.model.save(path)
         elif self.model_type == "yolov5":
             torch.save(self.model.state_dict(), path)
 
-    def load(self, path: str):
+    def load(self, path: str) -> None:
         """Load model weights"""
         if self.model_type == "yolov8":
-            from ultralytics import YOLO
+            from ultralytics import YOLO  # type: ignore[attr-defined]
 
             self.model = YOLO(path)
         elif self.model_type == "yolov5":

@@ -380,7 +380,7 @@ class DatasetViewer:
         print(f"Filter: {status_filter}")
 
 
-def main():
+def main() -> None:
     """Main entry point."""
     parser = argparse.ArgumentParser(
         description="View and validate training datasets",

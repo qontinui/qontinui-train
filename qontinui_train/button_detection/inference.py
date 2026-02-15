@@ -10,9 +10,11 @@ from typing import Any
 
 import cv2
 import numpy as np
+import numpy.typing as npt
 import torch
 from PIL import Image
 
+from qontinui_train.button_detection.models.button_cnn import ButtonCNN
 from qontinui_train.button_detection.models.button_yolo import ButtonYOLO
 
 
@@ -61,8 +63,9 @@ class ButtonDetectorInference:
         print(f"Inference device: {self.device}")
 
         # Load model
-        self.model = self._load_model()
-        self.model.eval()
+        self.model: ButtonCNN | ButtonYOLO = self._load_model()
+        if isinstance(self.model, ButtonCNN):
+            self.model.eval()
 
         # Class names
         self.class_names = [
@@ -72,12 +75,10 @@ class ButtonDetectorInference:
             "text_button",
         ]
 
-    def _load_model(self):
+    def _load_model(self) -> ButtonCNN | ButtonYOLO:
         """Load trained model from checkpoint"""
         if self.model_type in ["yolov8", "yolov5"]:
             # Load YOLO model
-            from qontinui_train.button_detection.models.button_yolo import ButtonYOLO
-
             model = ButtonYOLO(
                 model_type=self.model_type,
                 model_size="n",  # Will be overridden by checkpoint
@@ -99,7 +100,7 @@ class ButtonDetectorInference:
                 create_button_cnn,
             )
 
-            model = create_button_cnn(
+            cnn_model = create_button_cnn(
                 {
                     "architecture": self.model_type,
                     "num_button_types": config.get("num_classes", 4),
@@ -109,14 +110,14 @@ class ButtonDetectorInference:
             )
 
             # Load state dict
-            model.load_state_dict(checkpoint["model_state_dict"])
-            model = model.to(self.device)
+            cnn_model.load_state_dict(checkpoint["model_state_dict"])
+            cnn_model = cnn_model.to(self.device)
 
-            return model
+            return cnn_model
 
     def preprocess_image(
         self,
-        image: str | Path | Image.Image | np.ndarray,
+        image: str | Path | Image.Image | npt.NDArray[Any],
         target_size: tuple[int, int] = (224, 224),
     ) -> torch.Tensor:
         """
@@ -149,7 +150,7 @@ class ButtonDetectorInference:
 
     def preprocess_region(
         self,
-        image: np.ndarray,
+        image: npt.NDArray[Any],
         bbox: list[int],
         target_size: tuple[int, int] = (224, 224),
     ) -> torch.Tensor:
@@ -183,7 +184,7 @@ class ButtonDetectorInference:
 
     @torch.no_grad()
     def predict_classification(
-        self, image: str | Path | Image.Image | np.ndarray | torch.Tensor
+        self, image: str | Path | Image.Image | npt.NDArray[Any] | torch.Tensor
     ) -> dict[str, Any]:
         """
         Run classification inference on single image/region
@@ -207,7 +208,8 @@ class ButtonDetectorInference:
 
         image_tensor = image_tensor.to(self.device)
 
-        # Inference
+        # Inference (classification is CNN-only)
+        assert isinstance(self.model, ButtonCNN)
         predictions = self.model.predict(
             image_tensor, threshold=self.confidence_threshold
         )
@@ -232,7 +234,7 @@ class ButtonDetectorInference:
 
     @torch.no_grad()
     def predict_detection(
-        self, image: str | Path | Image.Image | np.ndarray
+        self, image: str | Path | Image.Image | npt.NDArray[Any]
     ) -> list[dict[str, Any]]:
         """
         Run detection inference on full image (YOLO)
@@ -259,7 +261,7 @@ class ButtonDetectorInference:
             raise ValueError("Detection mode requires YOLO model")
 
     def predict_regions(
-        self, image: np.ndarray, regions: list[list[int]]
+        self, image: npt.NDArray[Any], regions: list[list[int]]
     ) -> list[dict[str, Any]]:
         """
         Predict button types for multiple regions in an image
@@ -271,6 +273,7 @@ class ButtonDetectorInference:
         Returns:
             List of predictions for each region
         """
+        assert isinstance(self.model, ButtonCNN)
         predictions = []
 
         for bbox in regions:
@@ -306,7 +309,7 @@ class ButtonDetectorInference:
 
     def predict_batch(
         self,
-        images: list[str | Path | Image.Image | np.ndarray],
+        images: list[str | Path | Image.Image | npt.NDArray[Any]],
         batch_size: int = 32,
     ) -> list[dict[str, Any]]:
         """
@@ -319,6 +322,7 @@ class ButtonDetectorInference:
         Returns:
             List of predictions
         """
+        assert isinstance(self.model, ButtonCNN)
         all_predictions = []
 
         # Process in batches
@@ -417,10 +421,10 @@ class ButtonDetectorInference:
 
     def visualize_predictions(
         self,
-        image: np.ndarray,
+        image: npt.NDArray[Any],
         predictions: list[dict[str, Any]],
         save_path: str | None = None,
-    ) -> np.ndarray:
+    ) -> npt.NDArray[Any]:
         """
         Visualize predictions on image
 
@@ -472,7 +476,7 @@ class ButtonDetectorInference:
 
 
 def create_inference_engine(
-    model_path: str, model_type: str = "mobilenet_v3", **kwargs
+    model_path: str, model_type: str = "mobilenet_v3", **kwargs: Any
 ) -> ButtonDetectorInference:
     """
     Factory function to create inference engine

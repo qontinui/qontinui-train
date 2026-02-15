@@ -7,6 +7,7 @@ Allows for validation and correction of automated predictions.
 
 import json
 from pathlib import Path
+from typing import Any
 
 import cv2
 import numpy as np
@@ -43,7 +44,7 @@ class DatasetLabeler:
         self.image_id = 1
         self.annotation_id = 1
 
-    def _init_coco_dataset(self) -> dict:
+    def _init_coco_dataset(self) -> dict[str, Any]:
         """Initialize COCO format dataset."""
         return {
             "info": {
@@ -59,7 +60,7 @@ class DatasetLabeler:
             "categories": [{"id": 1, "name": "button", "supercategory": "ui_element"}],
         }
 
-    def detect_buttons_opencv(self, image_path: str) -> list[dict]:
+    def detect_buttons_opencv(self, image_path: str) -> list[dict[str, Any]]:
         """
         Detect buttons using OpenCV-based analysis.
 
@@ -85,7 +86,7 @@ class DatasetLabeler:
             edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
         )
 
-        candidates = []
+        candidates: list[dict[str, Any]] = []
 
         for contour in contours:
             # Get bounding box
@@ -115,11 +116,11 @@ class DatasetLabeler:
                 )
 
         # Sort by confidence
-        candidates.sort(key=lambda x: x["confidence"], reverse=True)
+        candidates.sort(key=lambda c: float(c["confidence"]), reverse=True)
 
         return candidates[:20]  # Return top 20 candidates
 
-    def detect_buttons_color(self, image_path: str) -> list[dict]:
+    def detect_buttons_color(self, image_path: str) -> list[dict[str, Any]]:
         """
         Detect buttons using color-based analysis.
 
@@ -187,8 +188,8 @@ class DatasetLabeler:
         return candidates
 
     def merge_detections(
-        self, detections: list[dict], iou_threshold: float = 0.5
-    ) -> list[dict]:
+        self, detections: list[dict[str, Any]], iou_threshold: float = 0.5
+    ) -> list[dict[str, Any]]:
         """
         Merge overlapping detections using Non-Maximum Suppression.
 
@@ -252,7 +253,7 @@ class DatasetLabeler:
 
     def label_image(
         self, image_path: str, split: str = "train", auto_detect: bool = True
-    ) -> dict:
+    ) -> dict[str, Any]:
         """
         Label a single image.
 
@@ -353,7 +354,7 @@ class DatasetLabeler:
 
         return stats
 
-    def export_coco(self, output_file: str | None = None):
+    def export_coco(self, output_file: str | None = None) -> None:
         """Export dataset in COCO format."""
         for split in ["train", "val", "test"]:
             if self.datasets[split]["images"]:
@@ -362,7 +363,7 @@ class DatasetLabeler:
                     json.dump(self.datasets[split], f, indent=2)
                 print(f"Exported {split} annotations to {out_file}")
 
-    def export_yolo(self, output_dir: str | None = None):
+    def export_yolo(self, output_dir: str | None = None) -> None:
         """Export dataset in YOLO format."""
         out_dir = Path(output_dir) if output_dir else self.output_dir / "yolo"
         out_dir.mkdir(parents=True, exist_ok=True)
@@ -399,7 +400,7 @@ class DatasetLabeler:
 
         print(f"Exported YOLO format to {out_dir}")
 
-    def export_pascal_voc(self, output_dir: str | None = None):
+    def export_pascal_voc(self, output_dir: str | None = None) -> None:
         """Export dataset in Pascal VOC format."""
         try:
             import xml.etree.ElementTree as ET
@@ -463,7 +464,7 @@ class DatasetLabeler:
         print(f"Exported Pascal VOC format to {out_dir}")
 
 
-def main():
+def main() -> None:
     """CLI interface for dataset labeling."""
     import argparse
 

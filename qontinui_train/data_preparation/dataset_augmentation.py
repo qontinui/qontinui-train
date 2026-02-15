@@ -48,15 +48,15 @@ class DatasetAugmenter:
             dataset: dict[str, Any] = json.load(f)
             return dataset
 
-    def save_dataset(self, dataset: dict, split: str):
+    def save_dataset(self, dataset: dict[str, Any], split: str) -> None:
         """Save COCO format dataset."""
         annotation_file = self.output_dir / "annotations" / f"{split}.json"
         with open(annotation_file, "w") as f:
             json.dump(dataset, f, indent=2)
 
     def rotate_image(
-        self, image: Image.Image, angle: float, annotations: list[dict]
-    ) -> tuple[Image.Image, list[dict]]:
+        self, image: Image.Image, angle: float, annotations: list[dict[str, Any]]
+    ) -> tuple[Image.Image, list[dict[str, Any]]]:
         """
         Rotate image and update bounding boxes.
 
@@ -131,8 +131,8 @@ class DatasetAugmenter:
         return rotated_pil, new_annotations
 
     def scale_image(
-        self, image: Image.Image, scale_factor: float, annotations: list[dict]
-    ) -> tuple[Image.Image, list[dict]]:
+        self, image: Image.Image, scale_factor: float, annotations: list[dict[str, Any]]
+    ) -> tuple[Image.Image, list[dict[str, Any]]]:
         """
         Scale image and update bounding boxes.
 
@@ -149,7 +149,7 @@ class DatasetAugmenter:
         new_height = int(height * scale_factor)
 
         # Scale image
-        scaled = image.resize((new_width, new_height), Image.LANCZOS)
+        scaled = image.resize((new_width, new_height), Image.Resampling.LANCZOS)
 
         # Update annotations
         new_annotations = []
@@ -189,18 +189,18 @@ class DatasetAugmenter:
         """
         # Random brightness
         brightness_factor = 1.0 + random.uniform(-brightness, brightness)
-        enhancer = ImageEnhance.Brightness(image)
-        image = enhancer.enhance(brightness_factor)
+        brightness_enhancer = ImageEnhance.Brightness(image)
+        image = brightness_enhancer.enhance(brightness_factor)
 
         # Random contrast
         contrast_factor = 1.0 + random.uniform(-contrast, contrast)
-        enhancer = ImageEnhance.Contrast(image)
-        image = enhancer.enhance(contrast_factor)
+        contrast_enhancer = ImageEnhance.Contrast(image)
+        image = contrast_enhancer.enhance(contrast_factor)
 
         # Random saturation
         saturation_factor = 1.0 + random.uniform(-saturation, saturation)
-        enhancer = ImageEnhance.Color(image)
-        image = enhancer.enhance(saturation_factor)
+        color_enhancer = ImageEnhance.Color(image)
+        image = color_enhancer.enhance(saturation_factor)
 
         return image
 
@@ -258,16 +258,16 @@ class DatasetAugmenter:
         new_height = int(height * scale)
 
         # Downscale
-        downscaled = image.resize((new_width, new_height), Image.LANCZOS)
+        downscaled = image.resize((new_width, new_height), Image.Resampling.LANCZOS)
 
         # Upscale back
-        upscaled = downscaled.resize((width, height), Image.LANCZOS)
+        upscaled = downscaled.resize((width, height), Image.Resampling.LANCZOS)
 
         return upscaled
 
     def flip_horizontal(
-        self, image: Image.Image, annotations: list[dict]
-    ) -> tuple[Image.Image, list[dict]]:
+        self, image: Image.Image, annotations: list[dict[str, Any]]
+    ) -> tuple[Image.Image, list[dict[str, Any]]]:
         """
         Flip image horizontally and update bounding boxes.
 
@@ -279,7 +279,7 @@ class DatasetAugmenter:
             Flipped image and updated annotations
         """
         width = image.size[0]
-        flipped = image.transpose(Image.FLIP_LEFT_RIGHT)
+        flipped = image.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
 
         # Update annotations
         new_annotations = []
@@ -293,8 +293,8 @@ class DatasetAugmenter:
         return flipped, new_annotations
 
     def augment_image(
-        self, image_path: str, annotations: list[dict], augmentation_config: dict
-    ) -> list[tuple[Image.Image, list[dict], str]]:
+        self, image_path: str, annotations: list[dict[str, Any]], augmentation_config: dict[str, Any]
+    ) -> list[tuple[Image.Image, list[dict[str, Any]], str]]:
         """
         Apply augmentation pipeline to a single image.
 
@@ -363,7 +363,7 @@ class DatasetAugmenter:
     def augment_dataset(
         self,
         split: str = "train",
-        augmentation_config: dict | None = None,
+        augmentation_config: dict[str, Any] | None = None,
         max_augmentations_per_image: int | None = None,
     ) -> dict[str, int]:
         """
@@ -491,7 +491,7 @@ class DatasetAugmenter:
         return stats
 
 
-def main():
+def main() -> None:
     """CLI interface for dataset augmentation."""
     import argparse
 

@@ -25,6 +25,7 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
+import numpy.typing as npt
 from models.action_execution_record import ActionExecutionRecord
 from PIL import Image
 from qontinui_schemas.common import utc_now
@@ -207,7 +208,7 @@ class TrainingDataExporter:
             stats: Statistics object to update.
         """
         # Build screenshot path
-        screenshot_path = storage_dir / record.screenshot_reference  # type: ignore[operator]
+        screenshot_path = storage_dir / record.screenshot_reference
         if not screenshot_path.exists():
             stats.skipped_records += 1
             return
@@ -362,7 +363,7 @@ class TrainingDataExporter:
     def _infer_bbox_smart(
         self,
         clicked_location: tuple[int, int],
-        screenshot: np.ndarray,
+        screenshot: npt.NDArray[Any],
         click_target_type: str | None = None,
     ) -> dict[str, Any] | None:
         """Infer bounding box using qontinui's sophisticated click analysis.

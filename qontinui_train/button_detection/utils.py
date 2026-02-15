@@ -13,6 +13,7 @@ from typing import Any
 
 import cv2
 import numpy as np
+import numpy.typing as npt
 
 
 def coco_to_yolo(
@@ -143,7 +144,7 @@ def visualize_annotations(
     annotations: list[dict[str, Any]],
     categories: dict[int, str],
     output_path: str | None = None,
-) -> np.ndarray:
+) -> npt.NDArray[Any]:
     """
     Visualize COCO annotations on image
 
@@ -280,7 +281,7 @@ def split_dataset(
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
-    def create_split(split_name: str, split_ids: set) -> str:
+    def create_split(split_name: str, split_ids: set[int]) -> str:
         split_data = {
             "images": [img for img in coco_data["images"] if img["id"] in split_ids],
             "annotations": [

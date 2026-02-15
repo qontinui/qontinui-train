@@ -125,7 +125,7 @@ class ButtonDatasetGenerator:
         self.image_id = 1
         self.annotation_id = 1
 
-    def _init_coco_dataset(self) -> dict:
+    def _init_coco_dataset(self) -> dict[str, Any]:
         """Initialize a COCO format dataset structure."""
         return {
             "info": {
@@ -169,7 +169,7 @@ class ButtonDatasetGenerator:
 
     def _draw_button(
         self,
-        draw: ImageDraw.Draw,
+        draw: ImageDraw.ImageDraw,
         x: int,
         y: int,
         width: int,
@@ -281,6 +281,7 @@ class ButtonDatasetGenerator:
             )
 
         # Draw label
+        font: ImageFont.FreeTypeFont | ImageFont.ImageFont
         try:
             font = ImageFont.truetype(
                 "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", max(10, height // 3)
@@ -310,13 +311,13 @@ class ButtonDatasetGenerator:
 
     def _draw_rounded_rectangle(
         self,
-        draw: ImageDraw.Draw,
+        draw: ImageDraw.ImageDraw,
         x1: int,
         y1: int,
         x2: int,
         y2: int,
         radius: int,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Draw a rounded rectangle."""
         if radius == 0:
@@ -379,7 +380,7 @@ class ButtonDatasetGenerator:
 
     def generate_sample(
         self, split: str = "train", num_buttons: int | None = None
-    ) -> dict:
+    ) -> dict[str, Any]:
         """
         Generate a single screenshot sample with buttons.
 
@@ -597,7 +598,7 @@ class ButtonDatasetGenerator:
         return stats
 
 
-def main():
+def main() -> None:
     """CLI interface for dataset generation."""
     import argparse
 

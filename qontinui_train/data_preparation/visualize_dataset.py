@@ -11,7 +11,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 
-def visualize_sample(dataset_dir: str, split: str = "train", num_samples: int = 5):
+def visualize_sample(dataset_dir: str, split: str = "train", num_samples: int = 5) -> None:
     """
     Visualize sample images with annotations.
 
@@ -47,6 +47,7 @@ def visualize_sample(dataset_dir: str, split: str = "train", num_samples: int = 
         anns = [a for a in dataset["annotations"] if a["image_id"] == image_id]
 
         # Try to load font
+        font: ImageFont.FreeTypeFont | ImageFont.ImageFont
         try:
             font = ImageFont.truetype(
                 "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 12
