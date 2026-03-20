@@ -91,3 +91,4 @@ htmlcov/
 # Distributed training
 **/core.*
 .nfs*
+.worktrees/
