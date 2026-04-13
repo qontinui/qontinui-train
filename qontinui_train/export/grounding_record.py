@@ -117,6 +117,9 @@ class GroundingRecord:
     phash: str | None = None
     """Perceptual hash for near-dedup (hex string)."""
 
+    metadata: dict | None = None
+    """Arbitrary metadata for specialized capture pipelines (e.g., component type, variant, theme, background)."""
+
     def to_dict(self) -> dict:
         """Serialize to a JSON-compatible dict, omitting ``None`` values."""
         d = asdict(self)
