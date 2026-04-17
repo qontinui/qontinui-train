@@ -47,6 +47,18 @@ _BARE_RE = re.compile(r"^\s*([\d.]+)\s+([\d.]+)\s*$")
 # Diagonal of the normalised unit square used for MDE normalisation
 _UNIT_DIAGONAL = math.sqrt(2)
 
+# ---------------------------------------------------------------------------
+# Canned benchmarks
+# ---------------------------------------------------------------------------
+# Maps --benchmark=<name> to a test-jsonl path, resolved relative to this file
+# so CI doesn't need to pass absolute paths. Keep this dict tight; only add a
+# new entry when there's a real benchmark definition + README describing its
+# origin and expected format.
+
+_BENCHMARK_PATHS: dict[str, Path] = {
+    "internal": Path(__file__).parent / "benchmarks" / "internal" / "test.jsonl",
+}
+
 
 # ---------------------------------------------------------------------------
 # Output parsing helpers
@@ -461,10 +473,25 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--test-jsonl",
-        required=True,
+        required=False,
+        default=None,
         type=Path,
         metavar="FILE",
-        help="Path to vlm_test.jsonl",
+        help=(
+            "Path to vlm_test.jsonl. Required unless --benchmark is given; "
+            "mutually exclusive with --benchmark."
+        ),
+    )
+    parser.add_argument(
+        "--benchmark",
+        default=None,
+        choices=sorted(_BENCHMARK_PATHS.keys()),
+        help=(
+            "Use a canned benchmark test set. When set, resolves --test-jsonl "
+            "to a repo-relative path. Currently: 'internal' -> "
+            "qontinui-train/evaluation/benchmarks/internal/test.jsonl. "
+            "See that directory's README for population instructions."
+        ),
     )
     parser.add_argument(
         "--baseline-model",
@@ -538,10 +565,29 @@ def main(argv: list[str] | None = None) -> None:
     if args.baseline_model is None and args.finetuned_model is None:
         parser.error("At least one of --baseline-model or --finetuned-model must be provided.")
 
+    # Resolve --benchmark / --test-jsonl (mutually exclusive; exactly one required)
+    if args.benchmark is not None and args.test_jsonl is not None:
+        parser.error("--benchmark and --test-jsonl are mutually exclusive.")
+    if args.benchmark is None and args.test_jsonl is None:
+        parser.error("Provide either --test-jsonl or --benchmark.")
+    if args.benchmark is not None:
+        args.test_jsonl = _BENCHMARK_PATHS[args.benchmark]
+
     # Load test data
     test_jsonl = args.test_jsonl.resolve()
     if not test_jsonl.exists():
-        logger.error("Test JSONL not found: %s", test_jsonl)
+        if args.benchmark is not None:
+            logger.error(
+                "Benchmark '%s' points to %s which does not exist. "
+                "Run `make benchmark-%s` or drop test.jsonl at that path. "
+                "See %s/README.md for the expected JSONL format.",
+                args.benchmark,
+                test_jsonl,
+                args.benchmark,
+                test_jsonl.parent,
+            )
+        else:
+            logger.error("Test JSONL not found: %s", test_jsonl)
         sys.exit(1)
 
     samples = load_test_samples(test_jsonl, max_samples=args.max_samples)
