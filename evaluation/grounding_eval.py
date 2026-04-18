@@ -83,9 +83,7 @@ def _available_benchmarks() -> list[str]:
             import sys as _sys
 
             _sys.path.insert(0, str(Path(__file__).parent))
-            from benchmarks import (
-                BENCHMARK_LOADERS,  # type: ignore[import-not-found,no-redef]
-            )
+            from benchmarks import BENCHMARK_LOADERS  # type: ignore[import-not-found,no-redef]
 
             names.update(BENCHMARK_LOADERS.keys())
         except Exception:
@@ -113,9 +111,7 @@ def _resolve_benchmark(name: str, cache_dir: Path) -> Path:
             import sys as _sys
 
             _sys.path.insert(0, str(Path(__file__).parent))
-            from benchmarks import (
-                BENCHMARK_LOADERS,  # type: ignore[import-not-found,no-redef]
-            )
+            from benchmarks import BENCHMARK_LOADERS  # type: ignore[import-not-found,no-redef]
         except Exception:
             BENCHMARK_LOADERS = {}  # type: ignore[assignment]
 
@@ -173,7 +169,8 @@ def parse_prompt_text(sample: dict[str, Any]) -> str:
             if isinstance(content, list):
                 for part in content:
                     if part.get("type") == "text":
-                        return part.get("text", "")
+                        text = part.get("text", "")
+                        return str(text) if text is not None else ""
             elif isinstance(content, str):
                 return content
     return ""
