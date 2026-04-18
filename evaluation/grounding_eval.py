@@ -54,10 +54,79 @@ _UNIT_DIAGONAL = math.sqrt(2)
 # so CI doesn't need to pass absolute paths. Keep this dict tight; only add a
 # new entry when there's a real benchmark definition + README describing its
 # origin and expected format.
+#
+# External benchmarks (ScreenSpot-v2, ScreenSpot-Pro, OSWorld-G) are NOT in
+# this dict — they're resolved via ``benchmarks.BENCHMARK_LOADERS`` at
+# runtime, which downloads from HF and caches a local shadow jsonl under
+# ``--benchmark-cache-dir``.
 
 _BENCHMARK_PATHS: dict[str, Path] = {
     "internal": Path(__file__).parent / "benchmarks" / "internal" / "test.jsonl",
 }
+
+
+def _available_benchmarks() -> list[str]:
+    """Return the union of canned + external benchmark names."""
+    # Import lazily so `grounding_eval` remains importable even if HF
+    # datasets isn't installed (external loaders aren't needed for
+    # --test-jsonl / --benchmark=internal paths).
+    names = set(_BENCHMARK_PATHS.keys())
+    try:
+        from .benchmarks import BENCHMARK_LOADERS
+
+        names.update(BENCHMARK_LOADERS.keys())
+    except ImportError:
+        # Running as a top-level script (``python grounding_eval.py``) —
+        # the package-relative import fails. Fall back to an absolute
+        # import using the file layout.
+        try:
+            import sys as _sys
+
+            _sys.path.insert(0, str(Path(__file__).parent))
+            from benchmarks import (
+                BENCHMARK_LOADERS,  # type: ignore[import-not-found,no-redef]
+            )
+
+            names.update(BENCHMARK_LOADERS.keys())
+        except Exception:
+            logger.debug("External benchmark loaders unavailable", exc_info=True)
+    return sorted(names)
+
+
+def _resolve_benchmark(name: str, cache_dir: Path) -> Path:
+    """Resolve a --benchmark name to a local test-jsonl path.
+
+    Order of resolution:
+    1. External loaders from ``benchmarks.BENCHMARK_LOADERS`` — downloads
+       the HF dataset (if not cached) and returns the shadow jsonl path.
+    2. Fallback: ``_BENCHMARK_PATHS`` lookup for canned local benchmarks
+       (currently only ``"internal"``).
+
+    Raises ``KeyError`` when *name* is not recognized by either layer.
+    """
+    # Try external loaders first — they emit local shadow files that the
+    # existing load_test_samples() can consume.
+    try:
+        from .benchmarks import BENCHMARK_LOADERS
+    except ImportError:
+        try:
+            import sys as _sys
+
+            _sys.path.insert(0, str(Path(__file__).parent))
+            from benchmarks import (
+                BENCHMARK_LOADERS,  # type: ignore[import-not-found,no-redef]
+            )
+        except Exception:
+            BENCHMARK_LOADERS = {}  # type: ignore[assignment]
+
+    if name in BENCHMARK_LOADERS:
+        loader = BENCHMARK_LOADERS[name]
+        return loader(cache_dir)
+
+    if name in _BENCHMARK_PATHS:
+        return _BENCHMARK_PATHS[name]
+
+    raise KeyError(name)
 
 
 # ---------------------------------------------------------------------------
@@ -485,12 +554,24 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--benchmark",
         default=None,
-        choices=sorted(_BENCHMARK_PATHS.keys()),
+        choices=_available_benchmarks(),
         help=(
-            "Use a canned benchmark test set. When set, resolves --test-jsonl "
-            "to a repo-relative path. Currently: 'internal' -> "
-            "qontinui-train/evaluation/benchmarks/internal/test.jsonl. "
-            "See that directory's README for population instructions."
+            "Use a canned or external benchmark test set. 'internal' resolves "
+            "to qontinui-train/evaluation/benchmarks/internal/test.jsonl; "
+            "'screenspot_v2' / 'screenspot_pro' / 'osworld_g' download from "
+            "HuggingFace and cache a normalized shadow jsonl under "
+            "--benchmark-cache-dir."
+        ),
+    )
+    parser.add_argument(
+        "--benchmark-cache-dir",
+        default=Path(__file__).parent.parent / ".benchmark-cache",
+        type=Path,
+        metavar="DIR",
+        help=(
+            "Cache root for external benchmark loaders. Each loader writes "
+            "<dir>/<benchmark>/test.jsonl (and an images/ subdir) on first "
+            "run, then reuses it on subsequent runs."
         ),
     )
     parser.add_argument(
@@ -571,7 +652,12 @@ def main(argv: list[str] | None = None) -> None:
     if args.benchmark is None and args.test_jsonl is None:
         parser.error("Provide either --test-jsonl or --benchmark.")
     if args.benchmark is not None:
-        args.test_jsonl = _BENCHMARK_PATHS[args.benchmark]
+        try:
+            args.test_jsonl = _resolve_benchmark(
+                args.benchmark, Path(args.benchmark_cache_dir).resolve()
+            )
+        except KeyError:
+            parser.error(f"Unknown benchmark: {args.benchmark!r}")
 
     # Load test data
     test_jsonl = args.test_jsonl.resolve()
@@ -614,6 +700,24 @@ def main(argv: list[str] | None = None) -> None:
         )
         all_results.append(result)
 
+        # Reproduction check: warn when running a known benchmark with a
+        # model that has a published Acc@center reference.
+        if args.benchmark is not None:
+            try:
+                from .reproduction_check import log_reproduction_check
+            except ImportError:
+                import sys as _sys
+
+                _sys.path.insert(0, str(Path(__file__).parent))
+                from reproduction_check import (  # type: ignore[import-not-found,no-redef]
+                    log_reproduction_check,
+                )
+            log_reproduction_check(
+                benchmark=args.benchmark,
+                model_id=model_name,
+                actual_acc_center=result["acc_center"],
+            )
+
     # Print report
     finetuned_name = args.finetuned_model if args.finetuned_model else None
     print_results(all_results, show_per_component_for=finetuned_name)
@@ -625,6 +729,7 @@ def main(argv: list[str] | None = None) -> None:
 
     payload: dict[str, Any] = {
         "test_jsonl": str(test_jsonl),
+        "benchmark": args.benchmark,
         "tolerance": args.tolerance,
         "max_samples": args.max_samples,
         "results": all_results,

@@ -54,8 +54,14 @@ All data collection mechanisms are strictly opt-in:
 | Feature | Activation |
 |---|---|
 | Trajectory logging | `QONTINUI_TRAJECTORY_LOGGER=on` |
+| WSM success labelling (inside trajectory logging) | `QONTINUI_WSM_ENABLED=1` (default when trajectory logging is on) |
 | Static capture | Manual run of `capture-grounding-data.ts` |
 | Training data export | `QONTINUI_EXPORT_TRAINING_DATA=true` |
+
+`QONTINUI_WSM_ENABLED` can be set to `0`/`false`/`off`/`no` to skip the
+World State Verifier step and force the pixel-diff heuristic. This does
+not disable trajectory logging itself — only the source of the
+`success_source` label on each record.
 
 **No data collection occurs by default.**
 
