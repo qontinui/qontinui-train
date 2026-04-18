@@ -83,7 +83,9 @@ def _available_benchmarks() -> list[str]:
             import sys as _sys
 
             _sys.path.insert(0, str(Path(__file__).parent))
-            from benchmarks import BENCHMARK_LOADERS  # type: ignore[import-not-found,no-redef]
+            from benchmarks import (  # type: ignore[import-not-found,no-redef]
+                BENCHMARK_LOADERS,
+            )
 
             names.update(BENCHMARK_LOADERS.keys())
         except Exception:
@@ -111,7 +113,9 @@ def _resolve_benchmark(name: str, cache_dir: Path) -> Path:
             import sys as _sys
 
             _sys.path.insert(0, str(Path(__file__).parent))
-            from benchmarks import BENCHMARK_LOADERS  # type: ignore[import-not-found,no-redef]
+            from benchmarks import (  # type: ignore[import-not-found,no-redef]
+                BENCHMARK_LOADERS,
+            )
         except Exception:
             BENCHMARK_LOADERS = {}  # type: ignore[assignment]
 
