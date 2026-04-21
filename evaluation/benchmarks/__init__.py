@@ -41,6 +41,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from pathlib import Path
 
+from .external_app import external_app_benchmarks
 from .osworld_g import load as load_osworld_g
 from .screenspot_pro import load as load_screenspot_pro
 from .screenspot_v2 import load as load_screenspot_v2
@@ -52,6 +53,11 @@ BENCHMARK_LOADERS: dict[str, Callable[[Path], Path]] = {
     "screenspot_pro": load_screenspot_pro,
     "osworld_g": load_osworld_g,
 }
+
+# Dynamic per-domain VGA held-out splits. One benchmark name per
+# target_process present in the local correction log. Safe when the log
+# is empty — returns an empty dict.
+BENCHMARK_LOADERS.update(external_app_benchmarks())
 
 
 __all__ = ["BENCHMARK_LOADERS"]
