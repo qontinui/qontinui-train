@@ -276,9 +276,9 @@ class DatasetManager:
         Returns:
             Statistics about the split
         """
-        assert (
-            abs(train_ratio + val_ratio + test_ratio - 1.0) < 0.01
-        ), "Ratios must sum to 1.0"
+        assert abs(train_ratio + val_ratio + test_ratio - 1.0) < 0.01, (
+            "Ratios must sum to 1.0"
+        )
 
         # Load input dataset
         dataset = self.load_coco_dataset(input_split)

@@ -39,9 +39,7 @@ def test_outside_threshold_returns_false_with_signed_delta():
 
 def test_outside_threshold_negative_delta():
     actual = 0.20  # published osworld_g = 0.419 -> delta ≈ -0.219
-    reproduces, delta = check_published_reproduction(
-        "osworld_g", MODEL_UITARS, actual
-    )
+    reproduces, delta = check_published_reproduction("osworld_g", MODEL_UITARS, actual)
     assert reproduces is False
     assert delta < -_REPRODUCE_TOLERANCE
 

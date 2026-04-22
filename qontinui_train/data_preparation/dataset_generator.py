@@ -515,9 +515,9 @@ class ButtonDatasetGenerator:
         Returns:
             Statistics about the generated dataset
         """
-        assert (
-            abs(train_ratio + val_ratio + test_ratio - 1.0) < 0.01
-        ), "Split ratios must sum to 1.0"
+        assert abs(train_ratio + val_ratio + test_ratio - 1.0) < 0.01, (
+            "Split ratios must sum to 1.0"
+        )
 
         num_train = int(num_samples * train_ratio)
         num_val = int(num_samples * val_ratio)

@@ -354,7 +354,7 @@ class StateDetectionTrainer:
 
                 checkpoint_path = (
                     Path(self.config["training"]["checkpoint_dir"])
-                    / f"checkpoint_epoch_{epoch+1}.pt"
+                    / f"checkpoint_epoch_{epoch + 1}.pt"
                 )
                 self.save_checkpoint(checkpoint_path, is_best=is_best)
 

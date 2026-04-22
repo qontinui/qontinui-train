@@ -70,9 +70,7 @@ class ShadowEvalReport:
     overall_gate_pass: bool
     # Raw counts for the dashboard widget (plan §13 recommendation E).
     total_samples: int = 0
-    started_at: datetime = field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    started_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     ended_at: datetime | None = None
 
     def to_dict(self) -> dict[str, Any]:
@@ -384,14 +382,13 @@ def _build_parser():  # type: ignore[no-untyped-def]
     )
     parser.add_argument("--pg-url", required=True)
     parser.add_argument("--candidate-model", required=True)
-    parser.add_argument(
-        "--baseline-model", default="qontinui-grounding-v5"
-    )
+    parser.add_argument("--baseline-model", default="qontinui-grounding-v5")
     parser.add_argument("--api-base", default="http://localhost:5800/v1")
     parser.add_argument("--target-process", default=None)
     parser.add_argument("--limit", type=int, default=500)
     parser.add_argument(
-        "--log-level", default="INFO",
+        "--log-level",
+        default="INFO",
         choices=["DEBUG", "INFO", "WARNING", "ERROR"],
     )
     return parser

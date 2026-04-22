@@ -342,7 +342,7 @@ class DatasetLabeler:
         stats = {"images": 0, "annotations": 0}
 
         for i, image_file in enumerate(image_files):
-            print(f"\nProcessing {i+1}/{len(image_files)}: {image_file.name}")
+            print(f"\nProcessing {i + 1}/{len(image_files)}: {image_file.name}")
 
             result = self.label_image(str(image_file), split)
 

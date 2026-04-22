@@ -188,7 +188,7 @@ class DatasetViewer:
                 for i, ann in enumerate(ann_data["annotations"]):
                     bbox = ann["bbox"]
                     print(
-                        f"    [{i+1}] {ann['category_name']} @ [{bbox[0]}, {bbox[1]}, {bbox[2]}, {bbox[3]}]"
+                        f"    [{i + 1}] {ann['category_name']} @ [{bbox[0]}, {bbox[1]}, {bbox[2]}, {bbox[3]}]"
                     )
                     print(
                         f"        Confidence: {ann['confidence']:.2f}, Source: {ann['source']}, Verified: {ann['verified']}"
@@ -243,7 +243,7 @@ class DatasetViewer:
                 ann_data = json.load(f)
 
             # Show image info
-            print(f"\n[{i+1}/{len(entries)}] {entry['image']}")
+            print(f"\n[{i + 1}/{len(entries)}] {entry['image']}")
             print(
                 f"Action: {entry['action_type']}, States: {', '.join(entry['active_states'])}"
             )
@@ -325,9 +325,9 @@ class DatasetViewer:
         total = len(self.reviews)
         print("\nReview Summary:")
         print(f"  Total Reviewed: {total}")
-        print(f"  Good: {good_count} ({good_count/total*100:.1f}%)")
-        print(f"  Bad: {bad_count} ({bad_count/total*100:.1f}%)")
-        print(f"  Skipped: {skip_count} ({skip_count/total*100:.1f}%)")
+        print(f"  Good: {good_count} ({good_count / total * 100:.1f}%)")
+        print(f"  Bad: {bad_count} ({bad_count / total * 100:.1f}%)")
+        print(f"  Skipped: {skip_count} ({skip_count / total * 100:.1f}%)")
 
     def export_filtered(self, output_dir: Path, status_filter: str = "good") -> None:
         """Export a filtered dataset.

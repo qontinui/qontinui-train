@@ -11,7 +11,9 @@ MODEL_UITARS = "ByteDance-Seed/UI-TARS-1.5-7B"
 MODEL_QONTINUI = "qontinui-grounding-v1"
 
 
-def _write_eval_blob(path: Path, benchmark: str, entries: list[tuple[str, float, float]]) -> None:
+def _write_eval_blob(
+    path: Path, benchmark: str, entries: list[tuple[str, float, float]]
+) -> None:
     blob = {
         "test_jsonl": f"/tmp/{benchmark}.jsonl",
         "benchmark": benchmark,

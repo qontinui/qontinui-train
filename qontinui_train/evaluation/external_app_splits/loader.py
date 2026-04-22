@@ -190,9 +190,7 @@ def load_per_domain_splits(
             try:
                 entry = json.loads(line)
             except json.JSONDecodeError as exc:
-                logger.warning(
-                    "Line %d: invalid JSON (%s), skipping", lineno, exc
-                )
+                logger.warning("Line %d: invalid JSON (%s), skipping", lineno, exc)
                 continue
 
             # Privacy filter.
@@ -215,7 +213,5 @@ def load_per_domain_splits(
             per_domain.setdefault(sample.target_process, []).append(sample)
 
     for domain, samples in per_domain.items():
-        logger.info(
-            "external_app_splits: domain=%s samples=%d", domain, len(samples)
-        )
+        logger.info("external_app_splits: domain=%s samples=%d", domain, len(samples))
     return per_domain

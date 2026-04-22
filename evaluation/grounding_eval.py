@@ -192,7 +192,7 @@ def parse_image_path(sample: dict[str, Any]) -> Path | None:
                         uri: str = part.get("image", "")
                         if uri.startswith("file:///"):
                             # Strip the scheme
-                            path_str = uri[len("file:///"):]
+                            path_str = uri[len("file:///") :]
                             # On Windows paths come as C:/... — keep as-is
                             return Path(path_str)
     return None
@@ -508,7 +508,9 @@ def print_results(
 # ---------------------------------------------------------------------------
 
 
-def load_test_samples(test_jsonl: Path, max_samples: int | None = None) -> list[dict[str, Any]]:
+def load_test_samples(
+    test_jsonl: Path, max_samples: int | None = None
+) -> list[dict[str, Any]]:
     """Load VLM SFT samples from *test_jsonl*.
 
     Each line is a JSON object with a ``"messages"`` key.
@@ -645,7 +647,9 @@ def main(argv: list[str] | None = None) -> None:
 
     # Validate: at least one model must be provided
     if args.baseline_model is None and args.finetuned_model is None:
-        parser.error("At least one of --baseline-model or --finetuned-model must be provided.")
+        parser.error(
+            "At least one of --baseline-model or --finetuned-model must be provided."
+        )
 
     # Resolve --benchmark / --test-jsonl (mutually exclusive; exactly one required)
     if args.benchmark is not None and args.test_jsonl is not None:

@@ -126,9 +126,9 @@ def test_screenspot_v2_normalize_row(tmp_path: Path):
     assert out is not None
     # center normalized = (100/200, 50/100) = (0.5, 0.5)
     assert out["messages"][1]["content"] == "<point>0.5000 0.5000</point>"
-    user_text = [
-        p for p in out["messages"][0]["content"] if p["type"] == "text"
-    ][0]["text"]
+    user_text = [p for p in out["messages"][0]["content"] if p["type"] == "text"][0][
+        "text"
+    ]
     # component_type "Icon" prepended so grounding_eval's _COMPONENT_RE matches
     assert "Icon" in user_text
 
@@ -218,9 +218,7 @@ def test_screenspot_v2_load_with_mocked_hf(tmp_path: Path, monkeypatch):
 
     # datasets may not be installed in the test env; inject a fake module
     # that has a load_dataset attribute before the loader tries to import.
-    fake_pkg = type(
-        "FakeDatasetsModule", (), {"load_dataset": fake_load_dataset}
-    )()
+    fake_pkg = type("FakeDatasetsModule", (), {"load_dataset": fake_load_dataset})()
     monkeypatch.setitem(__import__("sys").modules, "datasets", fake_pkg)
     importlib.reload(mod)
 

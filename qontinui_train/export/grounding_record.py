@@ -51,6 +51,7 @@ _MAX_JSONL_BYTES = 100 * 1024 * 1024  # 100 MB
 # Schema dataclasses
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class GroundingElement:
     """A single UI element detected in the screenshot."""
@@ -137,6 +138,7 @@ def _strip_none(d: dict) -> dict:
 # ---------------------------------------------------------------------------
 # Writer
 # ---------------------------------------------------------------------------
+
 
 class GroundingJSONLWriter:
     """Append-only writer for ``grounding.jsonl`` with dedup and rotation.
