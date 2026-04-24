@@ -72,7 +72,8 @@ def _read_image_dimensions(image_path: Path) -> tuple[int, int] | None:
 
     try:
         with Image.open(image_path) as im:
-            return im.size
+            w, h = im.size
+            return (int(w), int(h))
     except (OSError, ValueError) as exc:
         logger.warning("Cannot open image %s: %s", image_path, exc)
         return None
@@ -119,7 +120,7 @@ def _entry_to_eval_sample(entry: dict[str, Any]) -> EvalSample | None:
     abs_posix = image_path.resolve().as_posix()
     uri = f"file:///{abs_posix.lstrip('/')}"
 
-    messages = [
+    messages: list[dict[str, Any]] = [
         {
             "role": "user",
             "content": [

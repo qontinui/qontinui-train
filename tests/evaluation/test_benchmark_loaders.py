@@ -110,7 +110,7 @@ def test_registry_contains_three_external_benchmarks():
 def _make_fake_pil_image(tmp_path: Path, name: str) -> Image.Image:
     """Produce an in-memory RGB image sized 200x100 (w x h)."""
     img = Image.new("RGB", (200, 100), color=(128, 128, 128))
-    img.filename = str(tmp_path / name)  # some HF samples carry filenames
+    img.filename = str(tmp_path / name)  # type: ignore[attr-defined]  # some HF samples carry filenames
     return img
 
 

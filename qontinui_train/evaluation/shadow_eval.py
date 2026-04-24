@@ -202,7 +202,8 @@ def _predict(
     raw = grounding_eval.run_model_inference(vlm_sample, model_name, api_base)
     if raw is None:
         return None
-    return grounding_eval.parse_point(raw)
+    result: tuple[float, float] | None = grounding_eval.parse_point(raw)
+    return result
 
 
 def _bbox_center_normalized(
@@ -222,7 +223,8 @@ def _image_dims(image_path: str) -> tuple[int, int] | None:
         return None
     try:
         with Image.open(_Path(image_path)) as im:
-            return im.size
+            w, h = im.size
+            return (int(w), int(h))
     except (OSError, ValueError):
         return None
 
@@ -241,7 +243,8 @@ def _within_tolerance(
         return False
     dx = pred[0] - target[0]
     dy = pred[1] - target[1]
-    return (dx * dx + dy * dy) ** 0.5 <= tolerance_normalized
+    dist: float = (dx * dx + dy * dy) ** 0.5
+    return dist <= tolerance_normalized
 
 
 # ---------------------------------------------------------------------------

@@ -33,7 +33,7 @@ import re
 import sys
 from collections import defaultdict
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 logger = logging.getLogger(__name__)
 
@@ -292,7 +292,7 @@ def run_model_inference(
             max_tokens=50,
             temperature=0.0,
         )
-        return response.choices[0].message.content
+        return cast("str | None", response.choices[0].message.content)
     except Exception as exc:
         logger.warning("API error for model %s: %s", model_name, exc)
         return None
