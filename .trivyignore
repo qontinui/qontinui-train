@@ -1,0 +1,23 @@
+# Trivy ignore list: advisories in the root poetry.lock that no relock can fix
+# while torch stays aligned with qontinui core. Each entry expires, so Trivy
+# reports it again once the date passes and someone has to check whether a fix
+# exists by then. Every other advisory in the root poetry.lock had a fixed
+# release and was lifted by floors in pyproject.toml (plan
+# 2026-11-05-dependency-advisory-followups-after-the-pillow-13-lift). This
+# mirrors qontinui/.trivyignore, which records the same residue for core.
+# No CI job runs Trivy for this repo yet: scan by hand from the repo root, where
+# Trivy reads this file by default, with --include-dev-deps. Without that flag
+# Trivy files 73 packages this lock places in main as dev and skips them
+# (multidict, pydantic, aiohttp and sqlalchemy among them), so runtime
+# advisories would be missed.
+
+# setuptools: torch 2.11.0 requires setuptools<82, and torchvision ^0.26 in
+# pyproject.toml holds torch at 2.11.0, the version qontinui gets from the
+# pytorch-cu128 index, which serves no newer torch. The fixes are in 83.0.0
+# and 84.1.0.
+CVE-2026-59890 exp:2027-02-01
+GHSA-xmj3-9gf7-h52w exp:2027-02-01
+
+# torch: fixed in 2.13.0, but torchvision ^0.26 holds torch at 2.11.0, aligned
+# with qontinui, whose pytorch-cu128 index serves nothing newer than 2.11.0+cu128.
+CVE-2025-3000 exp:2027-02-01
